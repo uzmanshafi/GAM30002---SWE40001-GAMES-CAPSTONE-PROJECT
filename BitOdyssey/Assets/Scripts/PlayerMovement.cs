@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 10.0f;
 
     private float inputDirectionHorizontal;
-    private bool isFacingRight = true;
+    public bool isFacingRight = true;
 
     private bool isWalking = false; //flag for when to play certain animations
     //private bool isGrounded = false; //not used but can be added for animations if need be.
