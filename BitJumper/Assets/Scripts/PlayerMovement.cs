@@ -97,6 +97,7 @@ public class PlayerMovement : MonoBehaviour
     private void Flip()
     {
         isFacingRight = !isFacingRight;
+        //Bug? This will make it upside down
         transform.Rotate(0.0f, 180.0f, 0.0f);
     }
 }
