@@ -8,8 +8,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D c2D;
 
-    public float moveSpeed = 5.0f;
-    public float jumpHeight = 10.0f;
+    [SerializeField] public float moveSpeed = 5.0f;
+    [SerializeField] public float jumpHeight = 10.0f;
 
     private float inputDirectionHorizontal;
     public bool isFacingRight = true;
