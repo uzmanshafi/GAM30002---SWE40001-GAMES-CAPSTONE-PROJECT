@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
     private Rigidbody rb;
     private Collider c2D;
 
-    [SerializeField] public float moveSpeed = 5.0f;
-    [SerializeField] public float jumpHeight = 10.0f;
-    public Transform groundCheck;
+    [SerializeField] private float moveSpeed = 5.0f;
+    [SerializeField] private float jumpHeight = 4.0f;
+    [SerializeField] private Transform groundCheck;
 
+    private float jumpCooldown = 0.1f; // The amount of time between jumps
+    private float lastJumpTime = 0.0f; // The time of the last jump
+    private bool isJumping = false;
+    private float jumpTime = 0.0f;
+    private float maxJumpTime = 0.3f;
+    private float jumpVelocity;
     private float inputDirectionHorizontal;
-    public bool isFacingRight = true;
+    private bool isFacingRight = true;
 
     private bool isWalking = false; //flag for when to play certain animations
     //private bool isGrounded = false; //not used but can be added for animations if need be.
@@ -23,13 +28,6 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         c2D = GetComponent<Collider>();
-
-    }
-
-    private void Awake()
-    {
-        
-        
     }
 
     // Update is called once per frame
@@ -42,7 +40,6 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         applyMovement();
-      
     }
 
     private void checkInput()
@@ -62,21 +59,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+        float jumpVelocity = Mathf.Sqrt(2 * jumpHeight * Physics.gravity.magnitude);
+        rb.velocity = new Vector3(rb.velocity.x, jumpVelocity, rb.velocity.z);
     }
 
     private void pollMovementDirection()
     {
-        if(isFacingRight && inputDirectionHorizontal < 0)
+        if (IsFacingRight() && inputDirectionHorizontal < 0)
         {
             Flip();
         }
-        else if(!isFacingRight && inputDirectionHorizontal > 0)
+        else if (!IsFacingRight() && inputDirectionHorizontal > 0)
         {
             Flip();
         }
 
-        if(rb.velocity.x != 0)
+        if (rb.velocity.x != 0)
         {
             isWalking = true;
         }
@@ -84,20 +82,25 @@ public class PlayerMovement : MonoBehaviour
         {
             isWalking = false;
         }
-
-        
     }
 
     private void isGrounded()
     {
-        if (Physics.CheckSphere(groundCheck.position, 0.1f, (LayerMask.GetMask("Ground"))))
+        if (Time.time - lastJumpTime >= jumpCooldown && Physics.CheckSphere(groundCheck.position, 0.1f, (LayerMask.GetMask("Ground"))))
         {
             Jump();
+            lastJumpTime = Time.time;
         }
     }
+
     private void Flip()
     {
         isFacingRight = !isFacingRight;
         transform.Rotate(0.0f, 180.0f, 0.0f);
+    }
+
+    public bool IsFacingRight()
+    {
+        return isFacingRight;
     }
 }
