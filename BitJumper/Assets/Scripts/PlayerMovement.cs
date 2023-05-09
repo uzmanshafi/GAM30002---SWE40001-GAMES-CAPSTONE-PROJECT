@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public Animator animator;
     private Rigidbody rb;
     private Collider c2D;
 
@@ -15,13 +17,18 @@ public class PlayerMovement : MonoBehaviour
     private float lastJumpTime = 0.0f; // The time of the last jump
     private bool isJumping = false;
     private float jumpTime = 0.0f;
-    private float maxJumpTime = 0.3f;
     private float jumpVelocity;
     private float inputDirectionHorizontal;
     private bool isFacingRight = true;
 
     private bool isWalking = false; //flag for when to play certain animations
-    //private bool isGrounded = false; //not used but can be added for animations if need be.
+
+    [Header("Events")]
+    [Space]
+    public UnityEvent OnLandEvent;
+
+    [System.Serializable]
+    public class BoolEvent : UnityEvent<bool> { }
 
     // Start is called before the first frame update
     void Start()
@@ -45,16 +52,29 @@ public class PlayerMovement : MonoBehaviour
     private void checkInput()
     {
         inputDirectionHorizontal = Input.GetAxisRaw("Horizontal");
-
+        animator.SetFloat("speed", Mathf.Abs(inputDirectionHorizontal));
         if (Input.GetButtonDown("Jump"))
         {
+            isJumping = true;
+            animator.SetBool("isJumping", true);
             isGrounded();
         }
     }
 
     private void applyMovement()
     {
-        rb.velocity = new Vector3(inputDirectionHorizontal * moveSpeed, rb.velocity.y, rb.velocity.z);
+        if (inputDirectionHorizontal != 0)
+        {
+            // Apply movement in the desired direction
+            rb.velocity = new Vector3(inputDirectionHorizontal * moveSpeed, rb.velocity.y, rb.velocity.z);
+        }
+        else
+        {
+            // Reduce velocity gradually if the player is not trying to move
+            Vector3 newVelocity = rb.velocity;
+            newVelocity.x = Mathf.Lerp(rb.velocity.x, 0, Time.deltaTime * 10);
+            rb.velocity = newVelocity;
+        }
     }
 
     private void Jump()
@@ -84,8 +104,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void isGrounded()
+    public void isGrounded()
     {
+        animator.SetBool("isJumping", false);
+
         if (Time.time - lastJumpTime >= jumpCooldown && Physics.CheckSphere(groundCheck.position, 0.1f, (LayerMask.GetMask("Ground"))))
         {
             Jump();
