@@ -24,14 +24,15 @@ public class FireballController : MonoBehaviour
     private void launchFireball()
     {
         GameObject newFB = Instantiate(fireballPrefab, fireballSP.position, Quaternion.identity);
-        Rigidbody2D fireballRB = newFB.GetComponent<Rigidbody2D>();
+        Rigidbody fireballRB = newFB.GetComponent<Rigidbody>();
         if (GetComponent<PlayerMovement>().isFacingRight)
         {
-            fireballRB.velocity = new Vector2(speed * 1, 0);
+            fireballRB.velocity = new Vector3(speed * 1, 0, 0);
         }
         else
         {
-            fireballRB.velocity = new Vector2(speed * -1, 0);
+            fireballRB.velocity = new Vector3(speed * -1, 0, 0);
         }
+        Destroy(newFB, 5.0f);
     }
 }
