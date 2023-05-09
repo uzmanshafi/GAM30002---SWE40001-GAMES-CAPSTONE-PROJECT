@@ -5,11 +5,12 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 
-    private Rigidbody2D rb;
-    private Collider2D c2D;
+    private Rigidbody rb;
+    private Collider c2D;
 
     [SerializeField] public float moveSpeed = 5.0f;
     [SerializeField] public float jumpHeight = 10.0f;
+    public Transform groundCheck;
 
     private float inputDirectionHorizontal;
     public bool isFacingRight = true;
@@ -20,8 +21,8 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        c2D = GetComponent<Collider2D>();
+        rb = GetComponent<Rigidbody>();
+        c2D = GetComponent<Collider>();
 
     }
 
@@ -50,18 +51,18 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump"))
         {
-            Jump();
+            isGrounded();
         }
     }
 
     private void applyMovement()
     {
-        rb.velocity = new Vector2(inputDirectionHorizontal * moveSpeed, rb.velocity.y);
+        rb.velocity = new Vector3(inputDirectionHorizontal * moveSpeed, rb.velocity.y, rb.velocity.z);
     }
 
     private void Jump()
     {
-        rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
+        rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
     }
 
     private void pollMovementDirection()
@@ -89,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void isGrounded()
     {
-        if (c2D.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if (Physics.CheckSphere(groundCheck.position, 0.1f, (LayerMask.GetMask("Ground"))))
         {
             Jump();
         }
@@ -97,7 +98,6 @@ public class PlayerMovement : MonoBehaviour
     private void Flip()
     {
         isFacingRight = !isFacingRight;
-        //Bug? This will make it upside down
         transform.Rotate(0.0f, 180.0f, 0.0f);
     }
 }
