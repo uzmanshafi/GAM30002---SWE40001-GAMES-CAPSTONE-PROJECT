@@ -1506,4 +1506,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 532924572}
-  offset: {x: 2, y: 1.2, z: -3}
+  perspectiveOffset: {x: 2, y: 2, z: -6}
+  orthographicOffset: {x: 2, y: 1.2, z: 0}
+  switchProjectionKey: 112
