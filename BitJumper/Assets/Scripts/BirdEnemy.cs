@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
+public class BirdEnemy : MonoBehaviour
 {
-    public GameObject bomb;
-    public Transform bombPos;
+    public GameObject egg;
+    public Transform eggPos;
 
     private float timer;
     private GameObject player;
@@ -36,6 +36,8 @@ public class EnemyAI : MonoBehaviour
 
     void shoot()
     {
-        Instantiate(bomb, bombPos.position, Quaternion.identity);
+        Instantiate(egg, eggPos.position, Quaternion.identity);
     }
 }
+
+

@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletScript : MonoBehaviour
+public class EggScript : MonoBehaviour
 {
     public GameObject player;
     private Rigidbody rb;
     public float force;
     public float timer;
-    public playerHealth pHealth;
-    public float damage;
+    //public playerHealth pHealth;
+    //public float damage;
 
     void Start()
     {
@@ -35,11 +35,11 @@ public class BulletScript : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision other)
+    /**void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
             other.gameObject.GetComponent<playerHealth>().health -= damage;
         }
-    }
+    }**/
 }
