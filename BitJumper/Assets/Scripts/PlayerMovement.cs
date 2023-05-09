@@ -62,20 +62,23 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void applyMovement()
+{
+    if (inputDirectionHorizontal != 0)
     {
-        if (inputDirectionHorizontal != 0)
-        {
-            // Apply movement in the desired direction
-            rb.velocity = new Vector3(inputDirectionHorizontal * moveSpeed, rb.velocity.y, rb.velocity.z);
-        }
-        else
-        {
-            // Reduce velocity gradually if the player is not trying to move
-            Vector3 newVelocity = rb.velocity;
-            newVelocity.x = Mathf.Lerp(rb.velocity.x, 0, Time.deltaTime * 10);
-            rb.velocity = newVelocity;
-        }
+        // Apply movement in the desired direction
+        rb.velocity = new Vector3(inputDirectionHorizontal * moveSpeed, rb.velocity.y, rb.velocity.z);
+        rb.drag = 0;
     }
+    else
+    {
+        // Reduce velocity gradually if the player is not trying to move
+        Vector3 newVelocity = rb.velocity;
+        newVelocity.x = Mathf.Lerp(rb.velocity.x, 0, Time.deltaTime * 10);
+        rb.velocity = newVelocity;
+        rb.drag = 0.5f;
+    }
+}
+
 
     private void Jump()
     {

@@ -30,7 +30,7 @@ public class HealthController : MonoBehaviour
       if (Input.GetKeyDown(KeyCode.E))
       {
          Debug.Log("E pressed for dmg");
-         TakeDamage(1);
+         TakeDamage(1.25f);
 
          if (currentHealth == 0)
          {
