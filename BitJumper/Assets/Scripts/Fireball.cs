@@ -18,10 +18,10 @@ public class Fireball : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter(Collider other)
     {
         /*
-        Collider2D other = collision.collider;
+        //Collider2D other = collision.collider;
         if (other.CompareTag("Enemy"))
         {
             // Deal damage to the enemy or destroy it

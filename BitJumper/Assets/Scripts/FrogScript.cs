@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class FrogScript : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class FrogScript : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D c2D;
 
-    private PlayerMovement player;
+    private GameObject player;
     [SerializeField] private float agro_distance = 50;
     [SerializeField] private float jump_strength = 10;
 
@@ -38,7 +39,7 @@ public class FrogScript : MonoBehaviour
     {
         if (    (transform.position.x - player.transform.position.x) * (transform.position.x - player.transform.position.x) +
                 (transform.position.y - player.transform.position.y) * (transform.position.y - player.transform.position.y) <=
-                agroDistance* agroDistance)
+                agro_distance * agro_distance)
         {
             return true;
         }
@@ -48,7 +49,7 @@ public class FrogScript : MonoBehaviour
     void Move()
     {
         int player_direction = transform.position.x - player.transform.position.x > 0 ? -1 : 1;
-        body.velocity = new Vector2(jump_strength * player_direction, jump_strength);
+        rb.velocity = new Vector2(jump_strength * player_direction, jump_strength);
     }
 
 }
