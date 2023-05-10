@@ -7,6 +7,7 @@ public class FireballController : MonoBehaviour
     public GameObject fireballPrefab;
     public Transform fireballSP;
     public float speed;
+
     void Start()
     {
         
@@ -25,7 +26,7 @@ public class FireballController : MonoBehaviour
     {
         GameObject newFB = Instantiate(fireballPrefab, fireballSP.position, Quaternion.identity);
         Rigidbody fireballRB = newFB.GetComponent<Rigidbody>();
-        if (GetComponent<PlayerMovement>().isFacingRight)
+        if (GetComponent<PlayerMovement>().IsFacingRight())
         {
             fireballRB.velocity = new Vector3(speed * 1, 0, 0);
         }
