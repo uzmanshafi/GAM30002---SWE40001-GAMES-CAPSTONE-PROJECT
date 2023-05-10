@@ -5,8 +5,8 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public Transform target;
-    public Vector3 perspectiveOffset = new Vector3(2, 2f, -6);
-    public Vector3 orthographicOffset = new Vector3(2, 1.2f, 0);
+    public Vector3 perspectiveOffset = new Vector3(2, 2f, -6.5f);
+    public Vector3 orthographicOffset = new Vector3(2, 1f, 0);
     private Camera cam;
 
     // Specify the key for switching camera projection mode
