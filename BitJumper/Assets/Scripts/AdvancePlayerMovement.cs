@@ -125,15 +125,18 @@ public class AdvancePlayerMovement : MonoBehaviour
         }
     }
 
-        private void FlipCharacter()
-{
-    float inputDirectionHorizontal = Input.GetAxisRaw("Horizontal");
-    if ((inputDirectionHorizontal > 0 && !isFacingRight) || (inputDirectionHorizontal < 0 && isFacingRight))
+    private void FlipCharacter()
     {
+        float inputDirectionHorizontal = Input.GetAxisRaw("Horizontal");
+        if ((inputDirectionHorizontal > 0 && !isFacingRight) || (inputDirectionHorizontal < 0 && isFacingRight))
+        {
         isFacingRight = !isFacingRight;
         transform.Rotate(0, 180, 0);
+        }
+    }
+    public bool IsFacingRight()
+    {
+        return isFacingRight;
     }
 }
-
-    }
 

@@ -599,7 +599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireballPrefab: {fileID: 2226533514511968526, guid: 44f6372a866cea842add6811c9a3729c, type: 3}
   fireballSP: {fileID: 52976173}
-  speed: 1
+  speed: 10
 --- !u!95 &532924579
 Animator:
   serializedVersion: 5

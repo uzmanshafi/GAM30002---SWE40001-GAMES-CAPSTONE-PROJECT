@@ -50,11 +50,13 @@ GameObject:
   m_Component:
   - component: {fileID: 2225521749745452217}
   - component: {fileID: 2225521749745452222}
-  - component: {fileID: 2225521749745452216}
   - component: {fileID: 2225521749745452218}
   - component: {fileID: 2225521749745452219}
   - component: {fileID: 2225521749745452197}
   - component: {fileID: 1528114087388842722}
+  - component: {fileID: -129638393318500322}
+  - component: {fileID: 1170534417}
+  - component: {fileID: 6274982431276354369}
   m_Layer: 0
   m_Name: 2D test player
   m_TagString: Untagged
@@ -131,22 +133,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2225521749745452216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2225521749745452221}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcdcf574eec6e0e41996cd9486d455b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpHeight: 10
-  groundCheck: {fileID: 2225521749800196137}
-  isFacingRight: 1
 --- !u!54 &2225521749745452218
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -205,6 +191,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   newPlayer: {fileID: 168266724051206042, guid: 23379cce0da86704ca9ac30f14909562, type: 3}
+--- !u!114 &-129638393318500322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2225521749745452221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1362fc3141ba8434a822b6406d186496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 6274982431276354369}
+  moveSpeed: 5
+  jumpHeight: 4
+  coyoteTimeDuration: 0.15
+  jumpCutDuration: 0.2
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
+  groundCheck: {fileID: 2225521749800196137}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  groundCheckCollider: {fileID: 2225521749800196136}
+  OnJumpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1170534417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2225521749745452221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15a72b281c628b64cb8e51caf36e5235, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newPlayer: {fileID: 168266724051206042, guid: 23379cce0da86704ca9ac30f14909562, type: 3}
+--- !u!95 &6274982431276354369
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2225521749745452221}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2225521749800196142
 GameObject:
   m_ObjectHideFlags: 0
