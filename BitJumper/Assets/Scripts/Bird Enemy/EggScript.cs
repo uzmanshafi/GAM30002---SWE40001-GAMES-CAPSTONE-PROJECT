@@ -5,7 +5,7 @@ using UnityEngine;
 public class EggScript : MonoBehaviour
 {
     public GameObject player;
-    private Rigidbody rb;
+    private Rigidbody2D rb;
     public float force;
     public float timer;
     //public playerHealth pHealth;
@@ -13,7 +13,7 @@ public class EggScript : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player");
 
         Vector3 direction = player.transform.position - transform.position;
@@ -29,9 +29,17 @@ public class EggScript : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (timer > 2)
+        if (timer > 5)
         {
             Destroy(gameObject);
+        }
+    }
+
+    void onTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Destroy(other.gameObject);
         }
     }
 
