@@ -6,23 +6,23 @@ using System;
 public class FrogScript : MonoBehaviour
 {
 
-    private Rigidbody rb;
-
     private GameObject player;
-    [SerializeField] private float agro_distance = 5000;
+
+    private isGroundedClass grounded;
+    [SerializeField] private float agro_distance = 50;
     [SerializeField] private float jump_strength = 10;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player");
-        //rb = GetComponent<Rigidbody>();
-        
-        if (player == null)
-        {
+        if (player == null) {
             throw new Exception("Player not found");
         }
-
+        grounded = GetComponent<isGroundedClass>();
+        if (grounded == null) {
+            throw new Exception("grounded not found");
+        }
     }
 
     // Update is called once per frame
@@ -46,7 +46,13 @@ public class FrogScript : MonoBehaviour
     void Move()
     {
         int player_direction = transform.position.x - player.transform.position.x > 0 ? -1 : 1;
-        transform.position = new Vector3(transform.position.x + player_direction, transform.position.y, transform.position.z);
+
+
+        if (grounded.IsGrounded) {
+        Debug.Log("Help");
+            transform.position = new Vector3(transform.position.x + player_direction * Time.deltaTime, 10, transform.position.z);
+        }
+        
         //rb.velocity = new Vector3(jump_strength * player_direction, jump_strength, 0);
     }
 
