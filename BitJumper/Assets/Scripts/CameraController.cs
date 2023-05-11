@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform target;
+    private Transform target;
     public Vector3 perspectiveOffset = new Vector3(2, 2f, -6.5f);
     public Vector3 orthographicOffset = new Vector3(2, 1f, 0);
     private Camera cam;
+    private GameObject player;
 
     // Specify the key for switching camera projection mode
     public KeyCode switchProjectionKey = KeyCode.P;
@@ -19,12 +20,8 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        // Check for the specified key input
-        if (Input.GetKeyDown(switchProjectionKey))
-        {
-            // Toggle between orthographic and perspective projections
-            cam.orthographic = !cam.orthographic;
-        }
+        player = GameObject.FindWithTag("Player");
+        target = player.transform;
     }
 
     void LateUpdate()
@@ -44,5 +41,9 @@ public class CameraController : MonoBehaviour
         {
             Debug.LogWarning("CameraController could not find a target.");
         }
+    }
+    public void PerspChange()
+    {
+        cam.orthographic = !cam.orthographic;
     }
 }

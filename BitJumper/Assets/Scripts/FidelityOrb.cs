@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class FidelityOrb : MonoBehaviour
 {
+    public CameraController camera;
+
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,6 +22,7 @@ public class FidelityOrb : MonoBehaviour
         if (fidelityChange != null)
         {
             fidelityChange.graphicalChange();
+            camera.PerspChange();
             Destroy(gameObject);
         }
     }
