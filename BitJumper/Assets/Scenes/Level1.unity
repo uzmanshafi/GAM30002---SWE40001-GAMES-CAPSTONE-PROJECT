@@ -316,6 +316,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08cf5e6d24c4109409e97446db775931, type: 3}
+--- !u!114 &157806412 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7150813116773332478, guid: 827a72fd44652934aa5bef9281ef3380, type: 3}
+  m_PrefabInstance: {fileID: 345993586}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74f3e83873e940f46b8db54af1a20b23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &216996644
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,6 +460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 1511568759}
+  transitionator: {fileID: 157806412}
 --- !u!135 &294415303
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -767,6 +779,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7150813116773332466, guid: 827a72fd44652934aa5bef9281ef3380, type: 3}
+      propertyPath: weight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7150813116773332467, guid: 827a72fd44652934aa5bef9281ef3380, type: 3}
       propertyPath: m_Name
       value: Post-Processing Volume
@@ -1081,7 +1097,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -424, y: -445}
+  m_AnchoredPosition: {x: 823, y: 730}
   m_SizeDelta: {x: 1000, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &537085304
@@ -1124,7 +1140,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 6
     m_MaxSize: 111
-    m_Alignment: 3
+    m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -4776,11 +4792,11 @@ PrefabInstance:
     - target: {fileID: 4161486712613727339, guid: e03c271c56847bc47848e4bb4c9150ce, type: 3}
       propertyPath: cam
       value: 
-      objectReference: {fileID: 726222955}
+      objectReference: {fileID: 0}
     - target: {fileID: 4161486712613727339, guid: e03c271c56847bc47848e4bb4c9150ce, type: 3}
       propertyPath: newPlayer
       value: 
-      objectReference: {fileID: 1080444699695318413, guid: b59e8d9ca6a0f704e91cce9085523a89, type: 3}
+      objectReference: {fileID: 4025808274346742687, guid: 7cb7154925a5d8244b3cbc95eeba00a9, type: 3}
     - target: {fileID: 4161486712613727340, guid: e03c271c56847bc47848e4bb4c9150ce, type: 3}
       propertyPath: OnJumpEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1

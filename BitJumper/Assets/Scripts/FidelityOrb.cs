@@ -5,6 +5,7 @@ using UnityEngine;
 public class FidelityOrb : MonoBehaviour
 {
     public CameraController camera;
+    public BitTransitionator transitionator;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +24,7 @@ public class FidelityOrb : MonoBehaviour
         {
             fidelityChange.graphicalChange();
             camera.PerspChange();
+            transitionator.Quality = 3;
             Destroy(gameObject);
         }
     }
