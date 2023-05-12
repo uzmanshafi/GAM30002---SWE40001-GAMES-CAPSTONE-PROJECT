@@ -68,13 +68,17 @@ public class AdvancePlayerMovement : MonoBehaviour
 
     private void UpdateGroundedStatus()
     {
-    Collider[] groundColliders = Physics.OverlapSphere(groundCheck.position, groundCheckCollider.radius, groundLayer);
-    isGrounded = groundColliders.Length > 0;
-    if (isGrounded)
-    {
-        lastGroundedTime = Time.time;
-        animator.SetBool("isJumping", false);
-    }
+        Collider[] groundColliders = Physics.OverlapSphere(groundCheck.position, groundCheckCollider.radius, groundLayer);
+        isGrounded = groundColliders.Length > 0;
+        if (isGrounded)
+        {
+            lastGroundedTime = Time.time;
+            if (lastJumpTime > 1f) //added check for last jump time to ensure animation is played
+            {
+                animator.SetBool("isJumping", false);
+            }
+            
+        }
     }
 
 
@@ -86,9 +90,9 @@ public class AdvancePlayerMovement : MonoBehaviour
         {
             if (Time.time - lastGroundedTime <= coyoteTimeDuration)
             {
+                lastJumpTime = Time.time; //moved so that isground can check to play animation
                 Jump();
                 isJumpCutAllowed = true;
-                lastJumpTime = Time.time;
             }
         }
 
@@ -125,15 +129,18 @@ public class AdvancePlayerMovement : MonoBehaviour
         }
     }
 
-        private void FlipCharacter()
-{
-    float inputDirectionHorizontal = Input.GetAxisRaw("Horizontal");
-    if ((inputDirectionHorizontal > 0 && !isFacingRight) || (inputDirectionHorizontal < 0 && isFacingRight))
+    private void FlipCharacter()
     {
+        float inputDirectionHorizontal = Input.GetAxisRaw("Horizontal");
+        if ((inputDirectionHorizontal > 0 && !isFacingRight) || (inputDirectionHorizontal < 0 && isFacingRight))
+        {
         isFacingRight = !isFacingRight;
         transform.Rotate(0, 180, 0);
+        }
+    }
+    public bool IsFacingRight()
+    {
+        return isFacingRight;
     }
 }
-
-    }
 
