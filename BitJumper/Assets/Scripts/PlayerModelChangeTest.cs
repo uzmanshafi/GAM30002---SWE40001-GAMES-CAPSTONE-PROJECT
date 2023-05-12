@@ -18,10 +18,10 @@ public class PlayerModelChangeTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            graphicalChange();
-        }
+        //if (Input.GetKeyDown(KeyCode.C))
+        //{
+        //    graphicalChange();
+        //}
     }
 
     public void graphicalChange()
