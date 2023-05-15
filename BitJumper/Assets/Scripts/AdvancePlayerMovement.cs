@@ -12,6 +12,7 @@ public class AdvancePlayerMovement : MonoBehaviour
     public float jumpCutDuration = 0.2f;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2.0f;
+    public bool Is3D = false;
     public Transform groundCheck;
     public LayerMask groundLayer;
     public SphereCollider groundCheckCollider;
@@ -50,7 +51,21 @@ public class AdvancePlayerMovement : MonoBehaviour
     private void HandleMovementInput()
     {
         float inputDirectionHorizontal = Input.GetAxisRaw("Horizontal");
-        animator.SetFloat("speed", Mathf.Abs(inputDirectionHorizontal));
+        if (Is3D)
+        {
+            if (Mathf.Abs(inputDirectionHorizontal) > 0.01)
+            {
+                animator.SetBool("IsWalking",true);
+            }
+            else
+            {
+                animator.SetBool("IsWalking", false);
+            }
+        }
+        else
+        {
+            animator.SetFloat("speed", Mathf.Abs(inputDirectionHorizontal));
+        }
     }
 
     private void ApplyMovementForce()
@@ -72,12 +87,26 @@ public class AdvancePlayerMovement : MonoBehaviour
         isGrounded = groundColliders.Length > 0;
         if (isGrounded)
         {
+            if (Is3D)
+            {
+                animator.SetBool("Grounded", true);
+            }
             lastGroundedTime = Time.time;
             if (lastJumpTime > 1f) //added check for last jump time to ensure animation is played
             {
-                animator.SetBool("isJumping", false);
+                if (!Is3D)
+                {
+                    animator.SetBool("isJumping", false);
+                }
             }
             
+        }
+        else
+        {
+            if (Is3D)
+            {
+                animator.SetBool("Grounded", false);
+            }
         }
     }
 
@@ -110,9 +139,17 @@ public class AdvancePlayerMovement : MonoBehaviour
 {
     float jumpVelocity = Mathf.Sqrt(2 * jumpHeight * -Physics.gravity.y);
     rb.velocity = new Vector3(rb.velocity.x, jumpVelocity, rb.velocity.z);
-    animator.SetBool("isJumping", true);
-    animator.SetTrigger("isJumping"); // Replace "Jump" with the name of the trigger parameter you set up in the Animator Controller
-}
+    if (Is3D)
+        {
+            animator.ResetTrigger("Jump");
+            animator.SetTrigger("Jump");
+        }
+        else
+        {
+            animator.SetBool("isJumping", true);
+            animator.SetTrigger("isJumping"); // Replace "Jump" with the name of the trigger parameter you set up in the Animator Controller
+        }
+    }
 
 
 

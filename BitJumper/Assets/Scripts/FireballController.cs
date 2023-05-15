@@ -7,6 +7,7 @@ public class FireballController : MonoBehaviour
     public GameObject fireballPrefab;
     public Transform fireballSP;
     public float speed;
+    public Animator animator;
 
     void Start()
     {
@@ -24,6 +25,11 @@ public class FireballController : MonoBehaviour
 
     private void launchFireball()
     {
+        if (animator != null)
+        {
+            animator.ResetTrigger("Attack");
+            animator.SetTrigger("Attack");
+        }
         GameObject newFB = Instantiate(fireballPrefab, fireballSP.position, Quaternion.identity);
         Rigidbody fireballRB = newFB.GetComponent<Rigidbody>();
         if (GetComponent<AdvancePlayerMovement>().IsFacingRight())
