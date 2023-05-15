@@ -24,10 +24,10 @@ MonoBehaviour:
     value: 4
   FixedVerticalResolution:
     overrideState: 1
-    value: 128
+    value: 240
   ColorDepth:
     overrideState: 1
-    value: 0.03125
+    value: 0.025
   DitherPattern:
     overrideState: 0
     value: {fileID: 2800000, guid: fd3fc319873bd5346875483dde02fcf7, type: 3}
