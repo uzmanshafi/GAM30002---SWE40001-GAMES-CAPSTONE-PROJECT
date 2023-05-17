@@ -25,6 +25,14 @@ public class BasicMovement : MonoBehaviour
     // animation reference
     private Animator anim;
 
+    private enum MovementState
+    {
+        Idle,
+        Running,
+        Jumping,
+        Falling
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -106,13 +114,25 @@ public class BasicMovement : MonoBehaviour
 
     public void UpdatePlayerAnimation()
     {
+        MovementState movementState;
         if (moveInput != 0)
         {
-            anim.SetBool("isRunning", true);
+            movementState = MovementState.Running;
         }
         else
         {
-            anim.SetBool("isRunning", false);
+            movementState = MovementState.Idle;
         }
+
+        if (rb.velocity.y > .1f)
+        {
+            movementState = MovementState.Jumping;
+        }
+        else if (rb.velocity.y < -.1f && !isGrounded && coyoteCounter < 0f)
+        {
+            movementState = MovementState.Falling;
+        }
+
+        anim.SetInteger("MovementState", (int)movementState);
     }
 }
