@@ -25,6 +25,10 @@ public class BasicMovement : MonoBehaviour
     // animation reference
     private Animator anim;
 
+    // sound effects
+
+    private PlayerSoundManager playerSoundManager;
+
     private enum MovementState
     {
         Idle,
@@ -37,6 +41,7 @@ public class BasicMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        playerSoundManager = GetComponent<PlayerSoundManager>();
     }
 
     void FixedUpdate()
@@ -80,6 +85,7 @@ public class BasicMovement : MonoBehaviour
             jumpTimeCounter = coyoteTime;
             rb.velocity = Vector3.up * jumpForce;
             coyoteCounter = 0; 
+            playerSoundManager.PlayJumpSFX();
         }
 
         if (Input.GetButton("Jump") && isJumping == true)
