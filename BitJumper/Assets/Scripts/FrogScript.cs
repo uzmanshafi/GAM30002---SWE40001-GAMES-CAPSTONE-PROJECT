@@ -47,7 +47,7 @@ public class FrogScript : MonoBehaviour
     {
         int player_direction = transform.position.x - player.transform.position.x > 0 ? -1 : 1;
 
-
+ 
         if (grounded.IsGrounded) {
         Debug.Log("Help");
             transform.position = new Vector3(transform.position.x + player_direction * Time.deltaTime, 10, transform.position.z);
