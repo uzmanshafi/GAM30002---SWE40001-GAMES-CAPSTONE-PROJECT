@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e376863baf42846aecbbfbfec87f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireballPrefab: {fileID: 1192626084109855825, guid: bbc24f68e3d0da940bb3315fcb42aec0, type: 3}
+  fireballPrefab: {fileID: 6976626163022933926, guid: 0e2e4e7123b6d1f4fa134213b4a114e3, type: 3}
   fireballSP: {fileID: 1728283942042967143}
   speed: 10
   animator: {fileID: 9032030601663688223}
