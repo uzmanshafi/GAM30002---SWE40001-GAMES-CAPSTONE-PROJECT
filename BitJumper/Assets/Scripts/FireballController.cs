@@ -7,6 +7,7 @@ public class FireballController : MonoBehaviour
     public GameObject fireballPrefab;
     public Transform fireballSP;
     public float speed;
+    public Animator animator;
 
     void Start()
     {
@@ -24,16 +25,12 @@ public class FireballController : MonoBehaviour
 
     private void launchFireball()
     {
-<<<<<<< Updated upstream
-        GameObject newFB = Instantiate(fireballPrefab, fireballSP.position, Quaternion.identity);
-=======
         if (animator != null)
         {
             animator.ResetTrigger("Attack");
             animator.SetTrigger("Attack");
         }
         GameObject newFB = Instantiate(fireballPrefab, fireballSP.position, fireballSP.rotation * Quaternion.Euler(0, 0, 90));
->>>>>>> Stashed changes
         Rigidbody fireballRB = newFB.GetComponent<Rigidbody>();
         if (GetComponent<AdvancePlayerMovement>().IsFacingRight())
         {
