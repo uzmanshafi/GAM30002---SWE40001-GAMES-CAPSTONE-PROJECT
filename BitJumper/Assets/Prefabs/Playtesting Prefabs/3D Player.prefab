@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1770152435805355826}
   - component: {fileID: 4449335864400090022}
   - component: {fileID: 4410586799857595432}
+  - component: {fileID: 1241921181064115312}
   - component: {fileID: 4956773528918990943}
   - component: {fileID: 4470086452590376108}
-  - component: {fileID: 8815723932054826360}
   - component: {fileID: 1803605818319826039}
   - component: {fileID: 6099648698250775469}
   m_Layer: 0
@@ -59,6 +59,7 @@ MonoBehaviour:
   animator: {fileID: 9032030601663688223}
   Rune1: {fileID: 1158315146208671511}
   Rune2: {fileID: 4432099540226291270}
+  Mode: 0
 --- !u!114 &4410586799857595432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,6 +73,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Max_HealthBar: 3.75
+--- !u!114 &1241921181064115312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4025808274346742687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0b7677b21be4b4f8ed9bec5688a3ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 6
+  jumpForce: 5.8
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
+  groundCheck: {fileID: 2579866057876339858}
+  checkRadius: 0.3
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 64
+  coyoteTime: 0.2
+  acceleration: 30
+  maxSpeed: 10
 --- !u!54 &4956773528918990943
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -101,46 +126,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.9, z: 2}
   m_Center: {x: 0, y: 0.95, z: 0}
---- !u!114 &8815723932054826360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4025808274346742687}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1362fc3141ba8434a822b6406d186496, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 9032030601663688223}
-  moveSpeed: 5
-  jumpHeight: 7
-  coyoteTimeDuration: 0.15
-  jumpCutDuration: 0.2
-  fallMultiplier: 5
-  lowJumpMultiplier: 2
-  Is3D: 1
-  groundCheck: {fileID: 2579866057876339858}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  groundCheckCollider: {fileID: 9060987667527618959}
-  OnJumpEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1799922049736748761}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: isJumping
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1803605818319826039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766,11 +751,6 @@ PrefabInstance:
 --- !u!4 &1418998086306624611 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7992056210740773133, guid: fa421b43618e9934381269e8407024c0, type: 3}
-  m_PrefabInstance: {fileID: 9032030601408640366}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1799922049736748761 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7323605520434650039, guid: fa421b43618e9934381269e8407024c0, type: 3}
   m_PrefabInstance: {fileID: 9032030601408640366}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &4660295960351932723 stripped
