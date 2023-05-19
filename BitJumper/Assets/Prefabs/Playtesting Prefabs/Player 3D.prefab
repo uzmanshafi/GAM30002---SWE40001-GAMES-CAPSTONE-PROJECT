@@ -108,9 +108,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e376863baf42846aecbbfbfec87f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireballPrefab: {fileID: 1192626084109855825, guid: bbc24f68e3d0da940bb3315fcb42aec0, type: 3}
+  fireballPrefab: {fileID: 6976626163022933926, guid: 0e2e4e7123b6d1f4fa134213b4a114e3, type: 3}
   fireballSP: {fileID: 1080444700022945169}
   speed: 10
+  animator: {fileID: 0}
 --- !u!114 &1080444699695318412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,6 +173,7 @@ MonoBehaviour:
   jumpCutDuration: 0.2
   fallMultiplier: 5
   lowJumpMultiplier: 2
+  Is3D: 0
   groundCheck: {fileID: 1080444699545023018}
   groundLayer:
     serializedVersion: 2

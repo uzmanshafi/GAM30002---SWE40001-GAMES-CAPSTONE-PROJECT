@@ -30,15 +30,17 @@ public class FireballController : MonoBehaviour
             animator.ResetTrigger("Attack");
             animator.SetTrigger("Attack");
         }
-        GameObject newFB = Instantiate(fireballPrefab, fireballSP.position, Quaternion.identity);
+        GameObject newFB = Instantiate(fireballPrefab, fireballSP.position, fireballSP.rotation * Quaternion.Euler(0, 0, 90));
         Rigidbody fireballRB = newFB.GetComponent<Rigidbody>();
         if (GetComponent<AdvancePlayerMovement>().IsFacingRight())
         {
             fireballRB.velocity = new Vector3(speed * 1, 0, 0);
+            fireballRB.angularVelocity = new Vector3(speed * 1, 0, 0);
         }
         else
         {
             fireballRB.velocity = new Vector3(speed * -1, 0, 0);
+            fireballRB.angularVelocity = new Vector3(speed * 1, 0, 0);
         }
         Destroy(newFB, 5.0f);
     }
