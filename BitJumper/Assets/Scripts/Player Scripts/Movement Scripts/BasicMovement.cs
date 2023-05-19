@@ -20,6 +20,7 @@ public class BasicMovement : MonoBehaviour
     private Rigidbody rb; 
     private float jumpTimeCounter;
     private bool isJumping;
+    private bool isFacingRight = true;
 
     private float moveInput;
     // animation reference
@@ -72,10 +73,12 @@ public class BasicMovement : MonoBehaviour
         // Rotate the sprite based on the direction
         if (moveInput < 0)
         {
+            isFacingRight = false;
             transform.rotation = Quaternion.Euler(0, 180, 0);  // Rotate to face left
         }
         else if (moveInput > 0)
         {
+            isFacingRight = true;
             transform.rotation = Quaternion.Euler(0, 0, 0);  // Rotate to face right
         }
 
@@ -140,5 +143,9 @@ public class BasicMovement : MonoBehaviour
         }
 
         anim.SetInteger("MovementState", (int)movementState);
+    }
+    public bool IsFacingRight()
+    {
+        return isFacingRight;
     }
 }
