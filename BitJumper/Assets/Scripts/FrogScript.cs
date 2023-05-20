@@ -67,6 +67,7 @@ public class FrogScript : MonoBehaviour
             rb.velocity = new Vector3(vx, vy, 0);
 
         }
+        
         // if (grounded.IsGrounded) {
         // Debug.Log("Help");
         //     transform.position = new Vector3(transform.position.x + player_direction * Time.deltaTime, 10, transform.position.z);
