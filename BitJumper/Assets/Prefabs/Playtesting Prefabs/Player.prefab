@@ -64,12 +64,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4161486712613727338}
   - component: {fileID: 4161486712613727337}
+  - component: {fileID: 7674744420955362875}
   - component: {fileID: 4161486712613727336}
   - component: {fileID: 4161486712613727331}
   - component: {fileID: 4161486712613727343}
   - component: {fileID: 4161486712613727342}
   - component: {fileID: 4161486712613727341}
-  - component: {fileID: 4161486712613727340}
   - component: {fileID: 4161486712613727339}
   - component: {fileID: -4921051114349349042}
   m_Layer: 3
@@ -137,7 +137,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 69722ed57b7540a4f875b4e628623e05, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 07251a501ef2ec145b45070b23a6b05b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -148,6 +148,30 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!114 &7674744420955362875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4161486712613727330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0b7677b21be4b4f8ed9bec5688a3ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 6
+  jumpForce: 11
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
+  groundCheck: {fileID: 4161486712528690117}
+  checkRadius: 0.3
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 64
+  coyoteTime: 0.2
+  acceleration: 30
+  maxSpeed: 10
 --- !u!114 &4161486712613727336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,6 +187,10 @@ MonoBehaviour:
   fireballPrefab: {fileID: 2226533514511968526, guid: 44f6372a866cea842add6811c9a3729c, type: 3}
   fireballSP: {fileID: 4161486713073458302}
   speed: 10
+  animator: {fileID: 0}
+  Rune1: {fileID: 0}
+  Rune2: {fileID: 0}
+  Mode: 0
 --- !u!114 &4161486712613727331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,7 +214,7 @@ Animator:
   m_GameObject: {fileID: 4161486712613727330}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ce2a24b0c479e4542a42d0e92a22931d, type: 2}
+  m_Controller: {fileID: 9100000, guid: fc74b3acc18dec5489b697e7b195c211, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -226,45 +254,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.06, y: 0.08, z: 0.1}
   m_Center: {x: 0, y: 0.04, z: 0}
---- !u!114 &4161486712613727340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4161486712613727330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1362fc3141ba8434a822b6406d186496, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 4161486712613727343}
-  moveSpeed: 5
-  jumpHeight: 7
-  coyoteTimeDuration: 0.15
-  jumpCutDuration: 0.2
-  fallMultiplier: 5
-  lowJumpMultiplier: 2
-  groundCheck: {fileID: 4161486712528690117}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  groundCheckCollider: {fileID: 4161486712528690107}
-  OnJumpEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4161486712613727343}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: SetTrigger
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: isJumping
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &4161486712613727339
 MonoBehaviour:
   m_ObjectHideFlags: 0
