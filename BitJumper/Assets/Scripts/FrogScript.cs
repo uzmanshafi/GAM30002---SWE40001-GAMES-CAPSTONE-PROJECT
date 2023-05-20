@@ -9,6 +9,7 @@ public class FrogScript : MonoBehaviour
     private GameObject player;
     private Rigidbody rb;
     private float agro_distance = 10;
+    private bool isFacingRight = false;
     [SerializeField] private float jump_strength = 10;
     [SerializeField] private Transform groundCheck;
 
@@ -40,14 +41,28 @@ public class FrogScript : MonoBehaviour
                 agro_distance * agro_distance);
     }
 
+    private void Flip()
+    {
+        isFacingRight = !isFacingRight;
+        transform.Rotate(0.0f, 180.0f, 0.0f);
+    }
+
     void Move()
     {
-        int player_direction = transform.position.x - player.transform.position.x > 0 ? -1 : 1;
+
         //divide scale by 2
         if (Physics.CheckBox(groundCheck.position, groundCheck.localScale / 2, Quaternion.identity, LayerMask.GetMask("Ground"), QueryTriggerInteraction.UseGlobal)) {
+        
+            int player_direction = transform.position.x - player.transform.position.x > 0 ? -1 : 1;
 
-            float vx = jump_strength * player_direction;
-            float vy = -(Physics.gravity.y / 2) * (player.transform.position.x - transform.position.x) / vx;
+            if (isFacingRight != (player_direction == 1)) {
+                Flip();
+            }
+
+            //2 / Physics.gravity.y = t
+            float vx = (transform.position.x - player.transform.position.x) / (2 * jump_strength / Physics.gravity.y);
+            float vy = jump_strength;
+            //-(Physics.gravity.y / 2) * (player.transform.position.x - transform.position.x) / vx;
 
             rb.velocity = new Vector3(vx, vy, 0);
 
