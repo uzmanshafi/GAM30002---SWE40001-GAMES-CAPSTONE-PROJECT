@@ -25,6 +25,7 @@ public class FrogKingAI : MonoBehaviour
     private Rigidbody playerRB;
 
     private bool isCharging = false;
+    private float charging;
 
     // Start is called before the first frame update
     void Start()
@@ -43,12 +44,20 @@ public class FrogKingAI : MonoBehaviour
             {
                 
             }
+            if (charging > chargeTime)
+            {
+                
+            }
         }
     }
 
     private void chargeJump(Vector3 target)
     {
-        
+        charging = Time.time;
+        isCharging = true;
+        Vector3 gravity = Physics.gravity;
+        float initialUpVel = Mathf.Sqrt(-2 * gravity.y * jumpAtkHeight);
+
     }
 
     private void makeJumpPrediction()
@@ -67,7 +76,7 @@ public class FrogKingAI : MonoBehaviour
         for (int i = 1; i < steps; i++)
         {
             float t = 0;
-            while (t < _time)
+            while (t < 1f)
             {
                 vel += acc * dt;
                 pos += vel * dt;
@@ -76,7 +85,7 @@ public class FrogKingAI : MonoBehaviour
             }
             points[i] = pos;
         }
-        return points;
+        //return points;
 
     }
 
