@@ -29,7 +29,7 @@ public class BasicMovement : MonoBehaviour
 
     private PlayerSoundManager playerSoundManager; // a sound manager for the player
 
-    private enum MovementState
+    private enum MovementState // an enum to keep track of the player's movement state
     {
         Idle,
         Running,
