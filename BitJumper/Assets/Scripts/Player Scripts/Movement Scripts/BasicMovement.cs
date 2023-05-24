@@ -27,7 +27,7 @@ public class BasicMovement : MonoBehaviour
 
     // sound effects
 
-    private PlayerSoundManager playerSoundManager;
+    private PlayerSoundManager playerSoundManager; // a sound manager for the player
 
     private enum MovementState
     {
