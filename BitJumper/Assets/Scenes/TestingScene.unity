@@ -1381,7 +1381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6630b6d400ac38b45859628c03d845c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  perspectiveOffset: {x: 2, y: 2, z: -150}
+  perspectiveOffset: {x: 2, y: 2, z: -120}
   orthographicOffset: {x: 2, y: 1, z: 0}
   switchProjectionKey: 112
 --- !u!1001 &834983617
@@ -3508,7 +3508,7 @@ MonoBehaviour:
   HP: 20
   Damage: 2
   AttackCooldown: 3
-  jumpAtkHeight: 7
+  jumpAtkHeight: 70
   jumpAtkMS: 0
   chargeTime: 2
   upCheck: {fileID: 0}
