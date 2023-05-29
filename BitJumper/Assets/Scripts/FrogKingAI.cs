@@ -26,6 +26,7 @@ public class FrogKingAI : MonoBehaviour
 
     private bool isCharging = false;
     private float charging; //current charge time
+    //private float initialHeight;
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +39,10 @@ public class FrogKingAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*if (rb.transform.position.y > initialHeight + 15)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, Physics.gravity.y * 2, rb.velocity.z);
+        }*/
         if (Input.GetKeyDown(KeyCode.C))
         {
             chargeJump();
@@ -48,9 +53,9 @@ public class FrogKingAI : MonoBehaviour
             {
                 makeJumpPrediction();
             }
-            if (charging > chargeTime)
+            if (Time.time - charging > chargeTime)
             {
-                makeJumpPrediction();
+                jumpAttack(player.transform.position);
             }
         }
     }
@@ -61,7 +66,7 @@ public class FrogKingAI : MonoBehaviour
     {
         charging = Time.time;
         isCharging = true;
-        
+        //initialHeight = rb.transform.position.y;
     }
 
     private void makeJumpPrediction()
@@ -96,15 +101,19 @@ public class FrogKingAI : MonoBehaviour
     private void jumpAttack(Vector3 target)
     {
         Vector3 gravity = Physics.gravity;
-        float dx = target.x - gameObject.transform.position.x;
+        //float dx = target.position.x - gameObject.transform.position.x;
         float dy = target.y - gameObject.transform.position.y;
+        Vector3 dxy = new Vector3(target.x - rb.transform.position.x, 0, target.z - rb.transform.position.z);
 
-        float initialUpVel = Mathf.Sqrt(-2 * gravity.y * jumpAtkHeight);
+        Vector3 initialUpVel = Vector3.up * Mathf.Sqrt(-2 * gravity.y * jumpAtkHeight);
 
         float upwardTime = Mathf.Sqrt((-2 * jumpAtkHeight) / gravity.y);
         float downwardTime = Mathf.Sqrt((2*(dy - jumpAtkHeight))/ gravity.y);
 
-        //float horizontalDisplacement = 
+        Vector3 initialHorizontalVel = (dxy * 1.1f) / (upwardTime + downwardTime);
+
+        isCharging = false;
+        rb.velocity = initialHorizontalVel + initialUpVel;
     }
 
 }
