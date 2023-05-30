@@ -3550,6 +3550,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8464933806318041881, guid: c99b8a0fddcbc374a9523da67c295fe9, type: 3}
+      propertyPath: m_Constraints
+      value: 88
+      objectReference: {fileID: 0}
     - target: {fileID: 8464933806318041884, guid: c99b8a0fddcbc374a9523da67c295fe9, type: 3}
       propertyPath: m_Name
       value: FrogKing
