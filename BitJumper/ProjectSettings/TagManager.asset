@@ -8,6 +8,8 @@ TagManager:
   - Restart
   - Enemy
   - isGrounded
+  - Ground
+  - FrogKing
   layers:
   - Default
   - TransparentFX
