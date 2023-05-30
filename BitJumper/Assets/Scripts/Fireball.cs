@@ -5,6 +5,7 @@ using UnityEngine;
 public class Fireball : MonoBehaviour
 {
     public int damage;
+    public GameObject impact;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +44,7 @@ public class Fireball : MonoBehaviour
             Destroy(gameObject);
         }
         */
+        Instantiate(impact, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 }

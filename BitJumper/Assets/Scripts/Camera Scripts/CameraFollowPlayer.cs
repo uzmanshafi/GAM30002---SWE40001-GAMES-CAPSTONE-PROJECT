@@ -8,6 +8,7 @@ public class CameraFollowPlayer : MonoBehaviour
     public Vector3 perspectiveOffset = new Vector3(2, 2f, -20);
     public Vector3 orthographicOffset = new Vector3(2, 3f, 0);
     private Camera cam;
+    private Camera subCam;
     private GameObject player;
     private bool isSwitching = false; 
     private float switchTime = 1f; 
@@ -29,6 +30,9 @@ public class CameraFollowPlayer : MonoBehaviour
         cam = GetComponent<Camera>();
         cam.orthographicSize = startOrthoSize;
         cam.fieldOfView = startPerspectiveFOV;
+        subCam = transform.GetChild(0).GetComponent<Camera>();
+        subCam.orthographicSize = startOrthoSize;
+        subCam.fieldOfView = startPerspectiveFOV;
 
         faderAnimator = screenFader.GetComponent<Animator>();
         
@@ -59,13 +63,16 @@ public class CameraFollowPlayer : MonoBehaviour
                 isSwitching = false;
                 currentSwitchTime = 0f;
                 cam.orthographic = !cam.orthographic;
+                subCam.orthographic = !subCam.orthographic;
                 if (cam.orthographic)
                 {
                     cam.orthographicSize = orthoSize;
+                    subCam.orthographicSize = orthoSize;
                 }
                 else
                 {
                     cam.fieldOfView = perspectiveFOV;
+                    subCam.fieldOfView = perspectiveFOV;
                 }
             }
             else
@@ -73,11 +80,13 @@ public class CameraFollowPlayer : MonoBehaviour
                 if (cam.orthographic)
                 {
                     cam.orthographicSize = Mathf.Lerp(startSize, orthoSize, t);
+                    subCam.orthographicSize = Mathf.Lerp(startSize, orthoSize, t);
                     transform.position = Vector3.Lerp(startPosition, target.position + perspectiveOffset, t);
                 }
                 else
                 {
                     cam.fieldOfView = Mathf.Lerp(startSize, perspectiveFOV, t);
+                    subCam.fieldOfView = Mathf.Lerp(startSize, perspectiveFOV, t);
                     transform.position = Vector3.Lerp(startPosition, new Vector3(target.position.x + orthographicOffset.x, target.position.y + orthographicOffset.y, transform.position.z), t);
                 }
             }

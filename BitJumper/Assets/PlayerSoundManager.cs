@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerSoundManager : MonoBehaviour
 {
     public AudioClip jumpSFX;
+    public AudioClip shootSFX;
     private AudioSource audioSource;
 
     private void Awake()
@@ -15,5 +16,9 @@ public class PlayerSoundManager : MonoBehaviour
     public void PlayJumpSFX()
     {
         audioSource.PlayOneShot(jumpSFX);
+    }
+    public void PlayFireSFX()
+    {
+        audioSource.PlayOneShot(shootSFX);
     }
 }
