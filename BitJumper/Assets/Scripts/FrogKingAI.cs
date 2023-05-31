@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class FrogKingAI : MonoBehaviour
 {
@@ -16,6 +18,10 @@ public class FrogKingAI : MonoBehaviour
     [SerializeField] GameObject tonguePrefab;
     [SerializeField] Transform tongueSP;
     private bool tongueTrigger = false;
+
+    [Header("Shoot Attack")]
+    [SerializeField] GameObject shot;
+    [SerializeField] Transform shotSP;
 
     [Header("Relative Transforms")]
     [SerializeField] Transform upCheck;
@@ -55,7 +61,12 @@ public class FrogKingAI : MonoBehaviour
     {
         checkBounds();
         pollDirection();
+        manipulateGravity();
         if (Input.GetKeyDown(KeyCode.C))
+        {
+            aimPrediction(player.transform.position, 10);
+        }
+        if (!isCharging && isGrounded && rb.velocity.y < 3 && false)
         {
             chargeJump();
         }
@@ -63,7 +74,7 @@ public class FrogKingAI : MonoBehaviour
         {
             if (playerRB.velocity.y > 0.5)
             {
-                makeJumpPrediction(jumpChoice);
+                jumpChoice(player.transform.position); //makeJumpPrediction(jumpChoice);
             }
             if (Time.time - charging > chargeTime)
             {
@@ -76,13 +87,23 @@ public class FrogKingAI : MonoBehaviour
         }
     }
 
+    private void manipulateGravity()
+    {
+        float dx = player.transform.position.x - transform.position.x;
+        if (rb.velocity.y < 0.5 && player.transform.position.y - transform.position.y < -2 )//&& (dx < 1 && dx > -1) )
+        {
+            rb.velocity += (Physics.gravity * 8) * Time.deltaTime;
+        }
+        
+    }
+
     private void pollDirection()
     {
-        if (player.transform.position.x - gameObject.transform.position.x > 0 && !isFacingRight)
+        if (player.transform.position.x - gameObject.transform.position.x > 5 && !isFacingRight)
         {
             flip();
         }
-        else if(player.transform.position.x - gameObject.transform.position.x < 0 && isFacingRight)
+        else if(player.transform.position.x - gameObject.transform.position.x < -5 && isFacingRight)
         {
             flip();
         }
@@ -93,6 +114,7 @@ public class FrogKingAI : MonoBehaviour
     {
         isFacingRight = !isFacingRight;
         transform.RotateAround(GetComponent<Collider>().bounds.center, Vector3.up, 180f);
+        rb.velocity = new Vector3(0.1f, rb.velocity.y, rb.velocity.z); //to make sure we land on target (shouldnt really be flipping in air anyway)
     }
 
     private void checkBounds()
@@ -127,12 +149,15 @@ public class FrogKingAI : MonoBehaviour
     {
         charging = Time.time;
         isCharging = true;
-        if (false)//(Random.Range(0,2) == 0)
+        int randomInt = Random.Range(0, 2);
+        //Debug.Log(randomInt); random seems not too random
+        if (randomInt == 1)
         {
             jumpChoice = new jumpAttkChoice(jumpAttack);
         }
         else
         {
+
             jumpChoice = new jumpAttkChoice(jumpAttack2);
         }
     }
@@ -164,7 +189,7 @@ public class FrogKingAI : MonoBehaviour
         }
         attkchoice(points[points.Length-1]);
 
-    }
+    }  //not working when right facing for unknown reason
 
     private void jumpAttack(Vector3 target) //Usage of transposed Kinematics equations 
     {                                       //to create the perfect jump arc with a given target and jumpHeight
@@ -173,35 +198,51 @@ public class FrogKingAI : MonoBehaviour
         float dy = target.y - gameObject.transform.position.y;
         Vector3 dxy = new Vector3(target.x - rb.transform.position.x, 0, target.z - rb.transform.position.z);
 
-        Vector3 initialUpVel = Vector3.up * Mathf.Sqrt(-2 * gravity.y * jumpAtkHeight);
+        float tempJH = jumpAtkHeight;
+        if (dxy.x < 5 && dxy.x > -5)
+        {
+            jumpAtkHeight = jumpAtkHeight / 2;
+        }
+
+        Vector3 initialUpVel = Vector3.up * Mathf.Sqrt(-2 * (gravity.y * 2) * jumpAtkHeight);
 
         float upwardTime = Mathf.Sqrt((-2 * jumpAtkHeight) / gravity.y);
         float downwardTime = Mathf.Sqrt((2*(dy - jumpAtkHeight))/ gravity.y);
 
-        Vector3 initialHorizontalVel = (dxy * 1.1f) / (upwardTime + downwardTime);
+        Vector3 initialHorizontalVel = (dxy * 1.7f) / (upwardTime + downwardTime);
 
         isCharging = false;
         rb.velocity = initialHorizontalVel + initialUpVel;
         lastJumped = Time.time;
+        jumpAtkHeight = tempJH;
+        Debug.Log("jumped");
     }
 
     private void jumpAttack2(Vector3 target) 
-    {                                       
+    {       
         Vector3 gravity = Physics.gravity;
         float dy = target.y - gameObject.transform.position.y;
         Vector3 dxy = new Vector3(target.x - rb.transform.position.x, 0, target.z - rb.transform.position.z);
 
-        Vector3 initialUpVel = Vector3.up * Mathf.Sqrt(-2 * gravity.y * jumpAtkHeight);
+        float tempJH = jumpAtkHeight;
+        if (dxy.x < 5 && dxy.x > -5)
+        {
+            jumpAtkHeight = jumpAtkHeight / 2;
+        }
+
+        Vector3 initialUpVel = Vector3.up * Mathf.Sqrt(-2 * (gravity.y * 1.2f) * jumpAtkHeight);
 
         float upwardTime = Mathf.Sqrt((-2 * jumpAtkHeight) / gravity.y);
         float downwardTime = Mathf.Sqrt((2 * (dy - jumpAtkHeight)) / gravity.y);
 
-        Vector3 initialHorizontalVel = (dxy * 0.85f) / (upwardTime + downwardTime);
+        Vector3 initialHorizontalVel = (dxy * 1.5f) / (upwardTime + downwardTime);
 
         isCharging = false;
         tongueTrigger = true;
         rb.velocity = initialHorizontalVel + initialUpVel;
         lastJumped = Time.time;
+        jumpAtkHeight = tempJH;
+        Debug.Log("jumped2");
     }
 
     private void tongueAttack()
@@ -210,11 +251,68 @@ public class FrogKingAI : MonoBehaviour
         {
             tongueTrigger = false;
             GameObject tongue = Instantiate(tonguePrefab, tongueSP);
+            tongue.transform.parent = gameObject.transform;
             //Physics.IgnoreCollision(tongue.GetComponent<Collider>(), GetComponent<Collider>());
         }
 
     }
 
-  
+    
+    private void aimPrediction(Vector3 target, float speed = 0.5f ) 
+    {
+        float distance_to_target = Vector3.Distance(transform.position, target);
+        float time_to_target = distance_to_target / speed;
+        float targetXMovement = playerRB.velocity.x;
+        float targetXPos = player.transform.position.x;
+        float xdisplacementPerTick;
 
+        if (targetXMovement > 0) {
+            xdisplacementPerTick = targetXPos - (targetXPos + (targetXMovement * Time.deltaTime));
+        }
+        else {
+            xdisplacementPerTick = targetXPos - (targetXPos - (targetXMovement * Time.deltaTime));
+        }
+
+        float targetYMovement = playerRB.velocity.y;
+        float targetYPos = player.transform.position.y;
+        float ydisplacementPerTick;
+
+        if (targetYMovement > 0)
+        {
+            ydisplacementPerTick = targetYPos - (targetYPos + (targetYMovement * Time.deltaTime));
+        }
+        else
+        {
+            ydisplacementPerTick = targetYPos - (targetYPos - (targetYMovement * Time.deltaTime));
+        }
+
+        float xDisplacement = xdisplacementPerTick * time_to_target;
+        float yDisplacement = ydisplacementPerTick * time_to_target;
+        Vector3 predictedVec = new Vector3(targetXPos + xDisplacement, targetYPos + yDisplacement);
+
+        float dx = predictedVec.x - transform.position.x;
+        float dy = predictedVec.y - transform.position.y;
+
+        double firing_angle = Math.Atan2(dy, dx);
+
+        Vector3 bulletVel = new Vector3((float)(speed * Math.Cos(firing_angle)), (float)(speed * Math.Sin(firing_angle)));
+
+        GameObject shotInstance = Instantiate(shot, new Vector3(shotSP.position.x, shotSP.position.y), Quaternion.identity);
+        shotInstance.transform.LookAt(player.transform);
+        shotInstance.GetComponent<Rigidbody>().velocity = bulletVel;
+
+    }
+
+    public bool FacingRight()
+    {
+        return isFacingRight;
+    }
+    public void takeDamage(int damage)
+    {
+        HP -= damage;
+        if (HP <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
 }
