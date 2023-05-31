@@ -21,6 +21,7 @@ public class Fireball : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+  
         /*
         //Collider2D other = collision.collider;
         if (other.CompareTag("Enemy"))

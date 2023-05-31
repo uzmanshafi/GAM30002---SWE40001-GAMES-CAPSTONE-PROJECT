@@ -23,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isWalking = false; //flag for when to play certain animations
 
+    public static PlayerMovement instance;
+
+    
     [Header("Events")]
     [Space]
     public UnityEvent OnLandEvent;
@@ -47,6 +50,21 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         applyMovement();
+    }
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void checkInput()
