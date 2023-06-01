@@ -10,6 +10,7 @@ public class FrogKingAI : MonoBehaviour
     [SerializeField] int HP;
     [SerializeField] int Damage;
     [SerializeField] float AttackCooldown;
+    [SerializeField] GameObject BossDoor;
 
     [Header("Jump Attack atr")]
     [SerializeField] float jumpAtkHeight;
@@ -66,7 +67,7 @@ public class FrogKingAI : MonoBehaviour
         {
             aimPrediction(player.transform.position, 10);
         }
-        if (!isCharging && isGrounded && rb.velocity.y < 3)
+        if (!isCharging && isGrounded && rb.velocity.y < 3 && false)
         {
             chargeJump();
         }
@@ -90,11 +91,11 @@ public class FrogKingAI : MonoBehaviour
     private void applyGravity()
     {
         float dx = player.transform.position.x - transform.position.x;
-        if (rb.velocity.y < 0.5 && player.transform.position.y - transform.position.y < -2 )//&& (dx < 1 && dx > -1) )
+        if (rb.velocity.y < 0.5 && player.transform.position.y - transform.position.y < -2)//&& (dx < 1 && dx > -1) )
         {
             rb.velocity += (Physics.gravity * 8) * Time.deltaTime;
         }
-        
+
     }
 
     private void pollDirection()
@@ -103,7 +104,7 @@ public class FrogKingAI : MonoBehaviour
         {
             flip();
         }
-        else if(player.transform.position.x - gameObject.transform.position.x < -5 && isFacingRight)
+        else if (player.transform.position.x - gameObject.transform.position.x < -5 && isFacingRight)
         {
             flip();
         }
@@ -170,7 +171,7 @@ public class FrogKingAI : MonoBehaviour
         var dt = Time.fixedDeltaTime / Physics.defaultSolverVelocityIterations;
         float distance = Vector3.Distance(playerRB.position, gameObject.transform.position);
         float movementPerStep = (jumpAtkHeight + jumpAtkHeight / 2) * dt;
-        int steps = (int) (distance / movementPerStep);
+        int steps = (int)(distance / movementPerStep);
         var acc = Physics.gravity;
 
         var points = new Vector3[steps];
@@ -187,7 +188,7 @@ public class FrogKingAI : MonoBehaviour
             }
             points[i] = pos;
         }
-        attkchoice(points[points.Length-1]);
+        attkchoice(points[points.Length - 1]);
 
     }  //not working when right facing for unknown reason
 
@@ -207,7 +208,7 @@ public class FrogKingAI : MonoBehaviour
         Vector3 initialUpVel = Vector3.up * Mathf.Sqrt(-2 * (gravity.y * 2) * jumpAtkHeight);
 
         float upwardTime = Mathf.Sqrt((-2 * jumpAtkHeight) / gravity.y);
-        float downwardTime = Mathf.Sqrt((2*(dy - jumpAtkHeight))/ gravity.y);
+        float downwardTime = Mathf.Sqrt((2 * (dy - jumpAtkHeight)) / gravity.y);
 
         Vector3 initialHorizontalVel = (dxy * 1.7f) / (upwardTime + downwardTime);
 
@@ -218,8 +219,8 @@ public class FrogKingAI : MonoBehaviour
         Debug.Log("jumped");
     }
 
-    private void jumpAttack2(Vector3 target) 
-    {       
+    private void jumpAttack2(Vector3 target)
+    {
         Vector3 gravity = Physics.gravity;
         float dy = target.y - gameObject.transform.position.y;
         Vector3 dxy = new Vector3(target.x - rb.transform.position.x, 0, target.z - rb.transform.position.z);
@@ -257,8 +258,8 @@ public class FrogKingAI : MonoBehaviour
 
     }
 
-    
-    private void aimPrediction(Vector3 target, float speed = 0.5f ) 
+
+    private void aimPrediction(Vector3 target, float speed = 0.5f)
     {
         float distance_to_target = Vector3.Distance(transform.position, target);
         float time_to_target = distance_to_target / speed;
@@ -312,7 +313,13 @@ public class FrogKingAI : MonoBehaviour
         HP -= damage;
         if (HP <= 0)
         {
-            Destroy(gameObject);
+            die();
         }
+    }
+
+    private void die()
+    {
+        Instantiate(BossDoor, new Vector3(groundCheck.position.x, groundCheck.position.y, 2), Quaternion.identity);
+        Destroy(gameObject);
     }
 }
