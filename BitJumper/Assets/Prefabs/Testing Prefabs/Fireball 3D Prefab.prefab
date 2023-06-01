@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+  impact: {fileID: 6995999560634883654, guid: a72f0d2dba8d9fb4386f39b7c5e79c27, type: 3}
 --- !u!135 &11197634793357662
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -56,7 +57,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3563729611987622186}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
