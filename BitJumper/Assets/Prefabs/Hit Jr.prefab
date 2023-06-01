@@ -9,15 +9,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 215807429025957450, guid: a72f0d2dba8d9fb4386f39b7c5e79c27, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.89
+      value: 1.78
       objectReference: {fileID: 0}
     - target: {fileID: 2577651871716196980, guid: a72f0d2dba8d9fb4386f39b7c5e79c27, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2577651871716196980, guid: a72f0d2dba8d9fb4386f39b7c5e79c27, type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3115137140219041782, guid: a72f0d2dba8d9fb4386f39b7c5e79c27, type: 3}
       propertyPath: InitialModule.rotation3D
@@ -28,12 +28,16 @@ PrefabInstance:
       value: 0.33333334
       objectReference: {fileID: 0}
     - target: {fileID: 5652106188548683117, guid: a72f0d2dba8d9fb4386f39b7c5e79c27, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652106188548683117, guid: a72f0d2dba8d9fb4386f39b7c5e79c27, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.033333335
+      value: 0.066667
       objectReference: {fileID: 0}
     - target: {fileID: 5652106188548683117, guid: a72f0d2dba8d9fb4386f39b7c5e79c27, type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 0.01
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 6995999560634883654, guid: a72f0d2dba8d9fb4386f39b7c5e79c27, type: 3}
       propertyPath: m_Name
