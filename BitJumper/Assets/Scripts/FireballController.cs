@@ -13,7 +13,9 @@ public class FireballController : MonoBehaviour
     public ParticleSystem Rune1;
     public ParticleSystem Rune2;
     public Version Mode;
+    public float FireBallCooldown;
 
+    private float timeSinceFB;
     private PlayerSoundManager playerSoundManager;
 
     void Start()
@@ -29,8 +31,9 @@ public class FireballController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F) && (Time.time - timeSinceFB > FireBallCooldown))
         {
+            timeSinceFB = Time.time;
             launchFireball();
         }
     }

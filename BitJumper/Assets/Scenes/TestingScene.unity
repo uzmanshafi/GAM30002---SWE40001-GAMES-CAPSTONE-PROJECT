@@ -701,6 +701,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4161486712613727336, guid: e03c271c56847bc47848e4bb4c9150ce, type: 3}
+      propertyPath: FireBallCooldown
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4161486712613727338, guid: e03c271c56847bc47848e4bb4c9150ce, type: 3}
       propertyPath: m_RootOrder
       value: 1

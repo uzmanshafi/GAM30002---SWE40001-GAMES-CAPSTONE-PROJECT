@@ -61,12 +61,12 @@ public class FrogKingAI : MonoBehaviour
     {
         checkBounds();
         pollDirection();
-        manipulateGravity();
+        applyGravity();
         if (Input.GetKeyDown(KeyCode.C))
         {
             aimPrediction(player.transform.position, 10);
         }
-        if (!isCharging && isGrounded && rb.velocity.y < 3 && false)
+        if (!isCharging && isGrounded && rb.velocity.y < 3)
         {
             chargeJump();
         }
@@ -87,7 +87,7 @@ public class FrogKingAI : MonoBehaviour
         }
     }
 
-    private void manipulateGravity()
+    private void applyGravity()
     {
         float dx = player.transform.position.x - transform.position.x;
         if (rb.velocity.y < 0.5 && player.transform.position.y - transform.position.y < -2 )//&& (dx < 1 && dx > -1) )
