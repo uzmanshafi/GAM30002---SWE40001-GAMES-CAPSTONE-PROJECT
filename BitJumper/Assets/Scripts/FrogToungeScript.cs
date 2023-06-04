@@ -52,7 +52,8 @@ public class FrogToungeScript : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            //do damage
+            HealthController playerHP = other.GetComponent<HealthController>();
+            playerHP.TakeDamage(1);
             Destroy(gameObject);
         }
         else if(other.tag == "FrogKing")
