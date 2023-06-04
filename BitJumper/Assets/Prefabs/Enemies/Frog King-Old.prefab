@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 7750963778156215679}
   - component: {fileID: 688718409}
   m_Layer: 0
-  m_Name: Frog King
+  m_Name: Frog King-Old
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
