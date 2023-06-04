@@ -6,7 +6,10 @@ public class HealthController : MonoBehaviour
 {
    [SerializeField] private float Max_HealthBar = 3.8f;
    public float currentHealth {get; private set;}
+    public GameManager gameManager;
+    private bool isDead;
 
+    
    public void Awake()
    {
       currentHealth = Max_HealthBar;
@@ -15,14 +18,11 @@ public class HealthController : MonoBehaviour
    public void TakeDamage(float damage)
    {
       currentHealth = Mathf.Clamp(currentHealth - damage, 0, Max_HealthBar);
-      if (currentHealth > 0)
+      if (currentHealth <= 0 && !isDead)
       {
-         
+            isDead = true;
+            gameManager.GameOver();
       } 
-      else
-      {
-             
-      }
    }
 
    private void Update()
