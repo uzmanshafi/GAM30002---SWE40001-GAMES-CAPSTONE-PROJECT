@@ -67,13 +67,13 @@ public class FrogKingAI : MonoBehaviour
         {
             aimPrediction(player.transform.position, 10);
         }*/
-        if (!isCharging && isGrounded && rb.velocity.y < 3 && false)
+        if (!isCharging && isGrounded && rb.velocity.y < 3)
         {
             chargeJump();
         }
         if (isCharging)
         {
-            if (playerRB.velocity.y > 0.5)
+            if (playerRB.velocity.y > 0.5 && Time.time - charging > chargeTime / 2)
             {
                 jumpChoice(player.transform.position); //makeJumpPrediction(jumpChoice);
             }
@@ -323,5 +323,14 @@ public class FrogKingAI : MonoBehaviour
     {
         Instantiate(BossDoor, new Vector3(groundCheck.position.x, groundCheck.position.y, 2), Quaternion.identity);
         Destroy(gameObject);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.tag == "Player")
+        {
+            HealthController playerHP = collision.collider.GetComponent<HealthController>();
+            playerHP.TakeDamage(1);
+        }
     }
 }
