@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class RespawnPlayer : MonoBehaviour
 {
-    public Transform respawn;
-    public Transform player;
+    private Transform respawn;
+    private Transform player;
 
 
     // Start is called before the first frame update
