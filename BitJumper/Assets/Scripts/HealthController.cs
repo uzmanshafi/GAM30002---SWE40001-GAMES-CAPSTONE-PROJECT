@@ -6,8 +6,8 @@ public class HealthController : MonoBehaviour
 {
    [SerializeField] private float Max_HealthBar = 3.8f;
    public float currentHealth {get; private set;}
-    GameManager gameManager;
-    public bool isDead;
+   public GameManager gameManager;
+   public bool isDead;
 
    public void Awake()
    {
@@ -21,6 +21,7 @@ public class HealthController : MonoBehaviour
       {
             isDead = true;
             gameManager.GameOver();
+            transform.gameObject.SetActive(false);
       } 
    }
 
