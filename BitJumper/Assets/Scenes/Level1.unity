@@ -25612,11 +25612,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1055947001}
   m_Mesh: {fileID: 4711208715938537054, guid: 2c12c4e82c8ee314db97ff8611528772, type: 3}
---- !u!4 &1058799923 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4161486712528690117, guid: e03c271c56847bc47848e4bb4c9150ce, type: 3}
-  m_PrefabInstance: {fileID: 4161486711633083012}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1064951487
 GameObject:
   m_ObjectHideFlags: 0
@@ -42339,11 +42334,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1791530097}
   m_Mesh: {fileID: 2910186984909734287, guid: 55e6f4cc18b57c34f9c03abbfb9bc085, type: 3}
---- !u!1 &1793292009 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4161486712613727330, guid: e03c271c56847bc47848e4bb4c9150ce, type: 3}
-  m_PrefabInstance: {fileID: 4161486711633083012}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1795165573
 GameObject:
   m_ObjectHideFlags: 0
@@ -47831,48 +47821,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4161486712613727331, guid: e03c271c56847bc47848e4bb4c9150ce, type: 3}
   m_PrefabInstance: {fileID: 4161486711633083012}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1793292009}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eebbfd0b5810981439845a4fa56785fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2059179760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1793292009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ee759ab408ef5b449362f66dd1e75f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2059179770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1793292009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f0b7677b21be4b4f8ed9bec5688a3ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 6
-  jumpForce: 11
-  fallMultiplier: 2.5
-  lowJumpMultiplier: 2
-  groundCheck: {fileID: 1058799923}
-  checkRadius: 0.3
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 64
-  coyoteTime: 0.2
-  acceleration: 30
-  maxSpeed: 10
 --- !u!1 &2059959455
 GameObject:
   m_ObjectHideFlags: 0
