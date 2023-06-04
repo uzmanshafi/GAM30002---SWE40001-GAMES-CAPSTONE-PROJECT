@@ -6,6 +6,7 @@ public class RespawnPlayer : MonoBehaviour
 {
     private Transform respawn;
     private Transform player;
+    private HealthController health;
 
 
     // Start is called before the first frame update
@@ -18,6 +19,7 @@ public class RespawnPlayer : MonoBehaviour
     void Update()
     {
         player = GameObject.FindWithTag("Player").transform;
+        health = GameObject.FindWithTag("Player").GetComponent<HealthController>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -25,10 +27,10 @@ public class RespawnPlayer : MonoBehaviour
         if (other.tag == "Boundary")
         {
             player.position = respawn.position;
-        }
-        if (other.tag == "Enemy")
-        {
-            player.position = respawn.position;
+            if (health != null)
+            {
+                health.TakeDamage(1f);
+            }
         }
     }
     public void ForceSpawn()
