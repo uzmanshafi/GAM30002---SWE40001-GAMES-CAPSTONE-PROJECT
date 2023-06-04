@@ -15,7 +15,7 @@ public class BasicMovement : MonoBehaviour
 
     public float acceleration = 30f;  // Set your desired acceleration
     public float maxSpeed = 10f;  // Set your maximum speed
-    public bool isGrounded; 
+    private bool isGrounded; 
     private float coyoteCounter; 
     private Rigidbody rb; 
     private float jumpTimeCounter;

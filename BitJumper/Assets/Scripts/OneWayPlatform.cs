@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class OneWayPlatform : MonoBehaviour
 {
-    public BasicMovement ground;
-    public Transform player;
     [SerializeField] private Vector3 entryDirection = Vector3.up;
     [SerializeField] private bool localDirection = false;
     [SerializeField, Range(1.0f, 2.0f)] private float triggerScale = 1.25f;
@@ -51,9 +49,9 @@ public class OneWayPlatform : MonoBehaviour
                 Physics.IgnoreCollision(collider, other, true);
             }
 
-            if (Input.GetButton("Down") && ground.isGrounded)
+            if (Input.GetKey("s"))
             {
-                Physics.IgnoreCollision(player.GetComponent<Collider>(), GetComponent<Collider>(), true);
+                Physics.IgnoreCollision(GameObject.FindWithTag("Player").GetComponent<Collider>(), GetComponent<Collider>(), true);
             }
         }
     }
