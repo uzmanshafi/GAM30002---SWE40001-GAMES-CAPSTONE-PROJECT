@@ -4,63 +4,35 @@ using UnityEngine;
 
 public class RespawnPlayer : MonoBehaviour
 {
-    public static RespawnPlayer Instance;
-    public Transform respawnPoint;
+    private Transform respawn;
+    private Transform player;
 
-    private void Awake()
+
+    // Start is called before the first frame update
+    void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        DontDestroyOnLoad(gameObject);
+        respawn = GameObject.FindWithTag("Respawn").transform;
     }
 
-    private void Start()
+    // Update is called once per frame
+    void Update()
     {
-        respawnPoint = GameObject.FindGameObjectWithTag("Respawn").transform;
+        player = GameObject.FindWithTag("Player").transform;
     }
 
-    public void ForceRespawn()
+    private void OnTriggerEnter(Collider other)
     {
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        if (playerObject != null)
+        if (other.tag == "Boundary")
         {
-            HealthController healthController = playerObject.GetComponent<HealthController>();
-            if (healthController != null)
-            {
-                playerObject.transform.position = new Vector3(respawnPoint.position.x, respawnPoint.position.y, 0);  // Reset Z position
-                healthController.ResetHealth();
-            }
+            player.position = respawn.position;
         }
-        else
+        if (other.tag == "Enemy")
         {
-            Debug.LogWarning("No player to respawn!");
+            player.position = respawn.position;
         }
     }
-
-    public void EnableCollider()
+    public void ForceSpawn()
     {
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        if (playerObject != null)
-        {
-            Collider playerCollider = playerObject.GetComponent<Collider>();
-            if (playerCollider != null)
-            {
-                playerCollider.enabled = true;
-            }
-            else
-            {
-                Debug.LogWarning("No collider to enable!");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("No player to enable collider!");
-        }
+        player.position = respawn.position;
     }
 }

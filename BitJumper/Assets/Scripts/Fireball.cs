@@ -21,7 +21,6 @@ public class Fireball : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-  
         /*
         //Collider2D other = collision.collider;
         if (other.CompareTag("Enemy"))
@@ -45,7 +44,26 @@ public class Fireball : MonoBehaviour
             Destroy(gameObject);
         }
         */
-        Instantiate(impact, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        if (other.CompareTag("Player")){
+
+        }
+        else if (other.CompareTag("PlayerProjectile"))
+        {
+
+        }
+        else
+        {
+            if (other.CompareTag("FrogKing"))
+            {
+                // Deal damage to the enemy or destroy it
+                FrogKingAI boss = other.GetComponent<FrogKingAI>();
+                if (boss != null)
+                {
+                    boss.takeDamage(damage);
+                }
+            }
+            Instantiate(impact, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        } 
     }
 }

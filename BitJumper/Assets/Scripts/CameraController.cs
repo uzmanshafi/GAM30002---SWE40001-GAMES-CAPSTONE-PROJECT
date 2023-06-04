@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        if (target != null && !HealthController.isPlayerDead)
+        if (target != null)
         {
             if (cam.orthographic)
             {
