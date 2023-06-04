@@ -3567,10 +3567,6 @@ PrefabInstance:
       value: FrogKing
       objectReference: {fileID: 0}
     - target: {fileID: 8464933806318041887, guid: c99b8a0fddcbc374a9523da67c295fe9, type: 3}
-      propertyPath: BossDoor
-      value: 
-      objectReference: {fileID: 1691350754098177104, guid: 8d4a2b80defbd494da2a41ae02703a98, type: 3}
-    - target: {fileID: 8464933806318041887, guid: c99b8a0fddcbc374a9523da67c295fe9, type: 3}
       propertyPath: chargeTime
       value: 1.5
       objectReference: {fileID: 0}
