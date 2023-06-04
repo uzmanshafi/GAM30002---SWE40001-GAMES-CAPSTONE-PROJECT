@@ -63,10 +63,10 @@ public class FrogKingAI : MonoBehaviour
         checkBounds();
         pollDirection();
         applyGravity();
-        if (Input.GetKeyDown(KeyCode.C))
+        /*if (Input.GetKeyDown(KeyCode.C))
         {
             aimPrediction(player.transform.position, 10);
-        }
+        }*/
         if (!isCharging && isGrounded && rb.velocity.y < 3 && false)
         {
             chargeJump();
