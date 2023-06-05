@@ -321,7 +321,8 @@ public class FrogKingAI : MonoBehaviour
 
     private void die()
     {
-        Instantiate(BossDoor, new Vector3(groundCheck.position.x, groundCheck.position.y, 2), Quaternion.identity);
+        BossDoor.SetActive(true);
+        //Instantiate(BossDoor, new Vector3(groundCheck.position.x, groundCheck.position.y, 0), Quaternion.identity);
         Destroy(gameObject);
     }
 

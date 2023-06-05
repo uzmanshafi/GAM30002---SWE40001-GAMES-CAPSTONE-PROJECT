@@ -11,7 +11,8 @@ public class BasicMovement : MonoBehaviour
     public Transform groundCheck; 
     public float checkRadius = 0.3f; 
     public LayerMask whatIsGround; 
-    public float coyoteTime = 0.2f; 
+    public float coyoteTime = 0.2f;
+    public bool canDoubleJump = false;
 
     public float acceleration = 30f;  // Set your desired acceleration
     public float maxSpeed = 10f;  // Set your maximum speed
@@ -21,6 +22,7 @@ public class BasicMovement : MonoBehaviour
     private float jumpTimeCounter;
     private bool isJumping;
     private bool isFacingRight = true;
+    private int jumps = 0;
 
     private float moveInput;
     // animation reference
@@ -52,6 +54,7 @@ public class BasicMovement : MonoBehaviour
         if (isGrounded)
         {
             coyoteCounter = coyoteTime;
+            jumps = 0;
         }
         else
         {
@@ -81,7 +84,11 @@ public class BasicMovement : MonoBehaviour
             isFacingRight = true;
             transform.rotation = Quaternion.Euler(0, 0, 0);  // Rotate to face right
         }
-
+        if (Input.GetButtonDown("Jump") && canDoubleJump && coyoteCounter < coyoteTime && jumps < 2)
+        {
+            jumps += 1;
+            coyoteCounter = coyoteTime;
+        }
         if (Input.GetButtonDown("Jump") && coyoteCounter > 0)
         {
             isJumping = true;
