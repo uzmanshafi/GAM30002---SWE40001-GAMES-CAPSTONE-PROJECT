@@ -216,7 +216,7 @@ public class FrogKingAI : MonoBehaviour
         rb.velocity = initialHorizontalVel + initialUpVel;
         lastJumped = Time.time;
         jumpAtkHeight = tempJH;
-        Debug.Log("jumped");
+        //Debug.Log("jumped");
     }
 
     private void jumpAttack2(Vector3 target)
@@ -243,7 +243,7 @@ public class FrogKingAI : MonoBehaviour
         rb.velocity = initialHorizontalVel + initialUpVel;
         lastJumped = Time.time;
         jumpAtkHeight = tempJH;
-        Debug.Log("jumped2");
+        //Debug.Log("jumped2");
     }
 
     private void tongueAttack()
