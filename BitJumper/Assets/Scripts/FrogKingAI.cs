@@ -48,6 +48,10 @@ public class FrogKingAI : MonoBehaviour
     private delegate void jumpAttkChoice(Vector3 target); //delegate for passing choice of jump Function
     private jumpAttkChoice jumpChoice;
 
+    // Projectile Phase
+    private bool isHiding = false;
+    private bool isShooting = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,7 +71,7 @@ public class FrogKingAI : MonoBehaviour
         {
             aimPrediction(player.transform.position, 10);
         }*/
-        if (!isCharging && isGrounded && rb.velocity.y < 3)
+        if (!isCharging && isGrounded && rb.velocity.y < 3 && HP > HP /2) //if on ground, not jumping and HP is above 50% charge jump
         {
             chargeJump();
         }
@@ -86,7 +90,13 @@ public class FrogKingAI : MonoBehaviour
         {
             tongueAttack();
         }
+        if (!isCharging && isGrounded && rb.velocity.y < 3 && HP < HP / 2)
+        {
+            hide();
+        }
     }
+
+    
 
     private void applyGravity()
     {
@@ -258,6 +268,10 @@ public class FrogKingAI : MonoBehaviour
 
     }
 
+    private void hide()
+    {
+        
+    }
 
     private void aimPrediction(Vector3 target, float speed = 0.5f)
     {
