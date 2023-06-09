@@ -209,7 +209,7 @@ MonoBehaviour:
   Damage: 2
   AttackCooldown: 3
   BossDoor: {fileID: 0}
-  jumpAtkHeight: 70
+  jumpAtkHeight: 5
   jumpAtkMS: 2
   chargeTime: 2
   tonguePrefab: {fileID: 5297253020768878269, guid: b340a330d11f426459e06565d18e98bb, type: 3}
