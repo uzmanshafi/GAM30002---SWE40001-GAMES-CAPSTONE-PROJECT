@@ -3714,7 +3714,11 @@ PrefabInstance:
       objectReference: {fileID: 5297253020768878269, guid: b340a330d11f426459e06565d18e98bb, type: 3}
     - target: {fileID: 8464933806318041887, guid: c99b8a0fddcbc374a9523da67c295fe9, type: 3}
       propertyPath: jumpAtkHeight
-      value: 15
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8464933806318041887, guid: c99b8a0fddcbc374a9523da67c295fe9, type: 3}
+      propertyPath: RageModeLength
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8464933806318041887, guid: c99b8a0fddcbc374a9523da67c295fe9, type: 3}
       propertyPath: shootPhaseLength

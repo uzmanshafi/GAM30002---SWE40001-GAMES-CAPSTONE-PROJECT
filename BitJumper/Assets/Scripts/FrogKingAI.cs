@@ -28,8 +28,6 @@ public class FrogKingAI : MonoBehaviour
     [SerializeField] float shotCooldown;
     [SerializeField] float shootPhaseLength;
 
-
-
     [Header("Relative Transforms")]
     [SerializeField] Transform upCheck;
     [SerializeField] Transform groundCheck;
@@ -57,9 +55,16 @@ public class FrogKingAI : MonoBehaviour
     // Projectile Phase
     private bool isHiding = false;
     private bool isShooting = false;
+    private int hidingHP;
     private float shootingStart = 0f;
     private float lastShot = 0f;
 
+
+    //Rage Mode
+    [Header("Rage Mode Attr")]
+    [SerializeField] float RageModeLength;
+    private float rageModeStart;
+    private bool rageMode = false;
 
     // Start is called before the first frame update
     void Start()
@@ -77,18 +82,23 @@ public class FrogKingAI : MonoBehaviour
         checkBounds();
         pollDirection();
         applyGravity();
-        if (Input.GetKeyDown(KeyCode.C))
+        phase1();
+        if (tongueTrigger && isGrounded) //used in both phases
         {
-            hide();
-            
+            tongueAttack();
         }
-        if (false && !isCharging && rb.velocity.y < 3 && currentHP > HP / 2 && (isGrounded || Time.time - lastJumped > chargeTime * 2)) //not jumping, HP is above 50%, and on ground or stuck on ledge charge jump
+        phase2();
+    }
+
+    private void phase1()
+    {
+        if (!isCharging && rb.velocity.y < 3 && currentHP > HP / 2 && (isGrounded || Time.time - lastJumped > chargeTime * 2)) //not jumping, HP is above 50%, and on ground or stuck on ledge charge jump
         {
             chargeJump();
         }
         if (isCharging)
         {
-            if (playerRB.velocity.y > 0.5 && Time.time - charging > chargeTime / 2)
+            if (playerRB.velocity.y > 0.5 && Time.time - charging > chargeTime / 2) //If player makes a move while Boss is charging, the boss would predict the movement and jump to said position. This did not work with both directions so is not used.
             {
                 jumpChoice(player.transform.position); //makeJumpPrediction(jumpChoice);
             }
@@ -97,33 +107,35 @@ public class FrogKingAI : MonoBehaviour
                 jumpChoice(player.transform.position);
             }
         }
-        if (tongueTrigger && isGrounded)
-        {
-            tongueAttack();
-        }
-        if (!isHiding && !isCharging && isGrounded && rb.velocity.y < 3 && currentHP < HP / 2)
-        {
-            hide();
-        }
-        if (isHiding && !isShooting && isGrounded && rb.velocity.y < 3)
-        {
-            isShooting = true;
-            shootingStart = Time.time;
-        }
-        if (isShooting && isGrounded && Time.time - lastShot > shotCooldown)
-        {
-            aimPrediction(player.transform.position, 10);
-            Debug.Log(Time.time - shootingStart);
-        }
-        if (isShooting && Time.time - shootingStart > shootPhaseLength)
-        {
-            
-            isShooting = false;
-            isHiding = false;
-        }
     }
 
-    
+    private void phase2()
+    {
+        rage();
+        if (!rageMode) //if in rage, don't hide/shoot
+        {
+            if (!isHiding && !isCharging && isGrounded && rb.velocity.y < 3 && currentHP < HP / 2) //starts hiding phase if hp is lower than half
+            {
+                hidingHP = currentHP;
+                hide();
+            }
+            if (isHiding && !isShooting && isGrounded && rb.velocity.y < 3) //Once boss is 'hiding' and touching the ground, start shooting phase
+            {
+                isShooting = true;
+                shootingStart = Time.time;
+            }
+            if (isShooting && isGrounded && Time.time - lastShot > shotCooldown) //Make Aim predicition and fire shot on cooldown
+            {
+                aimPrediction(player.transform.position, 10);
+            }
+            if (isShooting && Time.time - shootingStart > shootPhaseLength) //Once we have exceeded the shooting phase length, stop both and start hiding
+            {
+
+                isShooting = false;
+                isHiding = false;
+            }
+        }
+    }
 
     private void applyGravity()
     {
@@ -188,7 +200,7 @@ public class FrogKingAI : MonoBehaviour
 
     private void chargeJump()
     {
-        charging = Time.time;
+        charging = Time.time; // Used to check how long we've been charging
         isCharging = true;
         int randomInt = Random.Range(0, 2);
         //Debug.Log(randomInt); random seems not too random
@@ -216,7 +228,7 @@ public class FrogKingAI : MonoBehaviour
 
         var points = new Vector3[steps];
         points[0] = playerRB.position;
-        for (int i = 1; i < steps; i++)
+        for (int i = 1; i < steps; i++) //Iterates through steps simulating 1 update of movement, not super accurate especially when right facing
         {
             float t = 0;
             while (t < 1f)
@@ -298,7 +310,7 @@ public class FrogKingAI : MonoBehaviour
 
     private void tongueAttack()
     {
-        if (Time.time - lastJumped > 0.5) //make sure we dont shoot early
+        if (Time.time - lastJumped > 0.5) //make sure we dont shoot before we leave the ground
         {
             tongueTrigger = false;
             GameObject tongue = Instantiate(tonguePrefab, tongueSP);
@@ -313,14 +325,14 @@ public class FrogKingAI : MonoBehaviour
         isHiding = true;
         GameObject[] platforms = GameObject.FindGameObjectsWithTag("Platform");
         Transform[] platformPos = new Transform[platforms.Length];
-        for (int i = 0; i < platforms.Length; i++)
+        for (int i = 0; i < platforms.Length; i++) //Get a referance to all platforms positions
         {
             platformPos[i] = platforms[i].GetComponent<Transform>();
         }
         float tempDist;
         float bestdistance = 0;
         Transform bestHidingSpot = gameObject.transform;
-        foreach (Transform p in platformPos)
+        foreach (Transform p in platformPos) //Iterate through platforms to find best hiding spot (Most distance, would have made it distance from player but it does not work well for gameplay))
         {
             tempDist = Vector3.Distance(gameObject.transform.position, p.position);
             if (tempDist > bestdistance)
@@ -330,7 +342,7 @@ public class FrogKingAI : MonoBehaviour
             }
         }
         Vector3 hidingSpot = Vector3.zero + bestHidingSpot.position;
-        hidingSpot.x -= 4;
+        hidingSpot.x -= 4; //Append hiding spot location to account for frog's large size and offset body
         jump(hidingSpot);
     }
 
@@ -342,7 +354,7 @@ public class FrogKingAI : MonoBehaviour
         float targetXPos = player.transform.position.x;
         float xdisplacementPerTick;
 
-        if (targetXMovement > 0)
+        if (targetXMovement > 0) //Find player's X movement/displacement
         {
             xdisplacementPerTick = targetXPos - (targetXPos + (targetXMovement * Time.deltaTime));
         }
@@ -355,7 +367,7 @@ public class FrogKingAI : MonoBehaviour
         float targetYPos = player.transform.position.y;
         float ydisplacementPerTick;
 
-        if (targetYMovement > 0)
+        if (targetYMovement > 0) //Find player's Y movement/displacement
         {
             ydisplacementPerTick = targetYPos - (targetYPos + (targetYMovement * Time.deltaTime));
         }
@@ -366,14 +378,14 @@ public class FrogKingAI : MonoBehaviour
 
         float xDisplacement = xdisplacementPerTick * time_to_target;
         float yDisplacement = ydisplacementPerTick * time_to_target;
-        Vector3 predictedVec = new Vector3(targetXPos + xDisplacement, targetYPos + yDisplacement);
+        Vector3 predictedVec = new Vector3(targetXPos + xDisplacement, targetYPos + yDisplacement); //predict location based on time for projectile to reach the target
 
-        float dx = predictedVec.x - transform.position.x;
+        float dx = predictedVec.x - transform.position.x; 
         float dy = predictedVec.y - transform.position.y;
 
-        double firing_angle = Math.Atan2(dy, dx);
+        double firing_angle = Math.Atan2(dy, dx); //using the displacmement, Find the angle we will have to fire at from our current pos.
 
-        Vector3 bulletVel = new Vector3((float)(speed * Math.Cos(firing_angle)), (float)(speed * Math.Sin(firing_angle)));
+        Vector3 bulletVel = new Vector3((float)(speed * Math.Cos(firing_angle)), (float)(speed * Math.Sin(firing_angle))); //Utilising the speed and firing angle, create a vector for the new bullet's required velocity
 
         GameObject shotInstance = Instantiate(shot, new Vector3(shotSP.position.x, shotSP.position.y), Quaternion.identity);
         shotInstance.transform.LookAt(player.transform);
@@ -394,12 +406,12 @@ public class FrogKingAI : MonoBehaviour
             jumpAtkHeight = jumpAtkHeight / 2;
         }
 
-        Vector3 initialUpVel = Vector3.up * Mathf.Sqrt(-2 * (gravity.y) * jumpAtkHeight);
+        Vector3 initialUpVel = Vector3.up * Mathf.Sqrt(-2 * (gravity.y) * (jumpAtkHeight*1.7f));
 
         float upwardTime = Mathf.Sqrt((-2 * jumpAtkHeight) / gravity.y);
         float downwardTime = Mathf.Sqrt((2 * (dy - jumpAtkHeight)) / gravity.y);
         Vector3 initialHorizontalVel = Vector3.zero;
-        if (float.IsNaN(upwardTime) || float.IsNaN(downwardTime))
+        if (float.IsNaN(upwardTime) || float.IsNaN(downwardTime)) //Unity API rounds any float 0.09 or lower to 0 causing NAN and a failed jump.
         {
             initialHorizontalVel = (dxz) / (3);
             Debug.Log("fumbled");
@@ -418,11 +430,33 @@ public class FrogKingAI : MonoBehaviour
 
     } //this function shows the mostly un-edited kinematics code, not tuned for a more playable jump
 
-    public bool FacingRight()
+    private void rage()
+    {
+        if (currentHP - hidingHP < -5) //If boss takes a certain amount of Hits during the hiding phase move into Rage Mode.
+        {
+            isHiding = false;
+            isShooting = false;
+            rageMode = true;
+            rageModeStart = Time.time;
+        }
+        if (rageMode && Time.time - rageModeStart < RageModeLength) // While in rage mode, make frequent random jumps
+        {
+            if (!isCharging && rb.velocity.y < 3 &&  (isGrounded || Time.time - lastJumped > chargeTime * 4))
+            {
+                chargeJump();
+            }
+            if (isCharging && Time.time - charging > 0.5)
+            {
+                jumpChoice(player.transform.position);
+            }
+        }
+    }
+
+    public bool FacingRight() //used by the Tounge to determine its direction to shoot.
     {
         return isFacingRight;
     }
-    public void takeDamage(int damage)
+    public void takeDamage(int damage) //So it can take damage from player.
     {
         currentHP -= damage;
         Debug.Log(currentHP);
@@ -432,7 +466,7 @@ public class FrogKingAI : MonoBehaviour
         }
     }
 
-    private void die()
+    private void die() // Instansiate boss door before death (for gameplay purposes)
     {
         BossDoor.SetActive(true);
         //Instantiate(BossDoor, new Vector3(groundCheck.position.x, groundCheck.position.y, 0), Quaternion.identity);
