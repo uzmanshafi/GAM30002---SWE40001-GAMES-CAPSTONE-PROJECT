@@ -396,20 +396,20 @@ public class FrogKingAI : MonoBehaviour
 
     private void jump(Vector3 target)
     {                                    
-        Vector3 gravity = Physics.gravity;
+        Vector3 gravity = Physics.gravity; // G = gravity
         float dy = target.y - gameObject.transform.position.y;
         Vector3 dxz = new Vector3(target.x - rb.transform.position.x, 0, target.z - rb.transform.position.z);
 
-        float tempJH = jumpAtkHeight;
+        float tempJH = jumpAtkHeight;// H = jumpHeight
         if (dxz.x < 5 && dxz.x > -5)
         {
             jumpAtkHeight = jumpAtkHeight / 2;
         }
 
-        Vector3 initialUpVel = Vector3.up * Mathf.Sqrt(-2 * (gravity.y) * (jumpAtkHeight*1.7f));
+        Vector3 initialUpVel = Vector3.up * Mathf.Sqrt(-2 * (gravity.y) * (jumpAtkHeight*1.7f)); // Initial Up Vel U = SQRT(-2gh)
 
-        float upwardTime = Mathf.Sqrt((-2 * jumpAtkHeight) / gravity.y);
-        float downwardTime = Mathf.Sqrt((2 * (dy - jumpAtkHeight)) / gravity.y);
+        float upwardTime = Mathf.Sqrt((-2 * jumpAtkHeight) / gravity.y); //Upward time T up = SQRT(-2h/g)
+        float downwardTime = Mathf.Sqrt((2 * (dy - jumpAtkHeight)) / gravity.y); //Downward time T dwn = SQRT(2(dy - h) / g)
         Vector3 initialHorizontalVel = Vector3.zero;
         if (float.IsNaN(upwardTime) || float.IsNaN(downwardTime)) //Unity API rounds any float 0.09 or lower to 0 causing NAN and a failed jump.
         {
@@ -418,7 +418,7 @@ public class FrogKingAI : MonoBehaviour
         }
         else
         {
-            initialHorizontalVel = (dxz) / (upwardTime + downwardTime);
+            initialHorizontalVel = (dxz) / (upwardTime + downwardTime); // Initial Left/Right Vel U = dx / T up + T dwn
         }
 
 
@@ -428,7 +428,7 @@ public class FrogKingAI : MonoBehaviour
         lastJumped = Time.time;
         jumpAtkHeight = tempJH;
 
-    } //this function shows the mostly un-edited kinematics code, not tuned for a more playable jump
+    } //this function shows the mostly un-edited kinematics code, commented to show off the use of the equations and not tuned for a more playable jump like others
 
     private void rage()
     {
