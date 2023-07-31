@@ -11,6 +11,7 @@ TagManager:
   - Ground
   - FrogKing
   - PlayerProjectile
+  - Platform
   layers:
   - Default
   - TransparentFX

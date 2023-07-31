@@ -12,6 +12,8 @@ public class FrogKingAI : MonoBehaviour
     [SerializeField] float AttackCooldown;
     [SerializeField] GameObject BossDoor;
 
+    private int currentHP;
+
     [Header("Jump Attack atr")]
     [SerializeField] float jumpAtkHeight;
     [SerializeField] float jumpAtkMS;
@@ -23,6 +25,8 @@ public class FrogKingAI : MonoBehaviour
     [Header("Shoot Attack")]
     [SerializeField] GameObject shot;
     [SerializeField] Transform shotSP;
+    [SerializeField] float shotCooldown;
+    [SerializeField] float shootPhaseLength;
 
     [Header("Relative Transforms")]
     [SerializeField] Transform upCheck;
@@ -48,6 +52,20 @@ public class FrogKingAI : MonoBehaviour
     private delegate void jumpAttkChoice(Vector3 target); //delegate for passing choice of jump Function
     private jumpAttkChoice jumpChoice;
 
+    // Projectile Phase
+    private bool isHiding = false;
+    private bool isShooting = false;
+    private int hidingHP;
+    private float shootingStart = 0f;
+    private float lastShot = 0f;
+
+
+    //Rage Mode
+    [Header("Rage Mode Attr")]
+    [SerializeField] float RageModeLength;
+    private float rageModeStart;
+    private bool rageMode = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,6 +73,7 @@ public class FrogKingAI : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         player = GameObject.FindWithTag("Player");
         playerRB = player.GetComponent<Rigidbody>();
+        currentHP = HP;
     }
 
     // Update is called once per frame
@@ -63,17 +82,23 @@ public class FrogKingAI : MonoBehaviour
         checkBounds();
         pollDirection();
         applyGravity();
-        /*if (Input.GetKeyDown(KeyCode.C))
+        phase1();
+        if (tongueTrigger && isGrounded) //used in both phases
         {
-            aimPrediction(player.transform.position, 10);
-        }*/
-        if (!isCharging && isGrounded && rb.velocity.y < 3)
+            tongueAttack();
+        }
+        phase2();
+    }
+
+    private void phase1()
+    {
+        if (!isCharging && rb.velocity.y < 3 && currentHP > HP / 2 && (isGrounded || Time.time - lastJumped > chargeTime * 2)) //not jumping, HP is above 50%, and on ground or stuck on ledge charge jump
         {
             chargeJump();
         }
         if (isCharging)
         {
-            if (playerRB.velocity.y > 0.5 && Time.time - charging > chargeTime / 2)
+            if (playerRB.velocity.y > 0.5 && Time.time - charging > chargeTime / 2) //If player makes a move while Boss is charging, the boss would predict the movement and jump to said position. This did not work with both directions so is not used.
             {
                 jumpChoice(player.transform.position); //makeJumpPrediction(jumpChoice);
             }
@@ -82,16 +107,40 @@ public class FrogKingAI : MonoBehaviour
                 jumpChoice(player.transform.position);
             }
         }
-        if (tongueTrigger && isGrounded)
+    }
+
+    private void phase2()
+    {
+        rage();
+        if (!rageMode) //if in rage, don't hide/shoot
         {
-            tongueAttack();
+            if (!isHiding && !isCharging && isGrounded && rb.velocity.y < 3 && currentHP < HP / 2) //starts hiding phase if hp is lower than half
+            {
+                hidingHP = currentHP;
+                hide();
+            }
+            if (isHiding && !isShooting && isGrounded && rb.velocity.y < 3) //Once boss is 'hiding' and touching the ground, start shooting phase
+            {
+                isShooting = true;
+                shootingStart = Time.time;
+            }
+            if (isShooting && isGrounded && Time.time - lastShot > shotCooldown) //Make Aim predicition and fire shot on cooldown
+            {
+                aimPrediction(player.transform.position, 10);
+            }
+            if (isShooting && Time.time - shootingStart > shootPhaseLength) //Once we have exceeded the shooting phase length, stop both and start hiding
+            {
+
+                isShooting = false;
+                isHiding = false;
+            }
         }
     }
 
     private void applyGravity()
     {
         float dx = player.transform.position.x - transform.position.x;
-        if (rb.velocity.y < 0.5 && player.transform.position.y - transform.position.y < -2)//&& (dx < 1 && dx > -1) )
+        if (!isHiding && (rb.velocity.y < 0.5 && player.transform.position.y - transform.position.y < -2))//&& (dx < 1 && dx > -1) ) // dont stomp if finding hiding spot
         {
             rb.velocity += (Physics.gravity * 8) * Time.deltaTime;
         }
@@ -113,9 +162,12 @@ public class FrogKingAI : MonoBehaviour
 
     private void flip()
     {
-        isFacingRight = !isFacingRight;
-        transform.RotateAround(GetComponent<Collider>().bounds.center, Vector3.up, 180f);
-        rb.velocity = new Vector3(0.1f, rb.velocity.y, rb.velocity.z); //to make sure we land on target (shouldnt really be flipping in air anyway)
+        if (!isHiding || isShooting) //dont clamp velocity or turn if not targeting player
+        {
+            isFacingRight = !isFacingRight;
+            transform.RotateAround(GetComponent<Collider>().bounds.center, Vector3.up, 180f);
+            rb.velocity = new Vector3(0.1f, rb.velocity.y, rb.velocity.z); //to make sure we land on target (shouldnt really be flipping in air anyway)
+        }
     }
 
     private void checkBounds()
@@ -148,7 +200,7 @@ public class FrogKingAI : MonoBehaviour
 
     private void chargeJump()
     {
-        charging = Time.time;
+        charging = Time.time; // Used to check how long we've been charging
         isCharging = true;
         int randomInt = Random.Range(0, 2);
         //Debug.Log(randomInt); random seems not too random
@@ -176,7 +228,7 @@ public class FrogKingAI : MonoBehaviour
 
         var points = new Vector3[steps];
         points[0] = playerRB.position;
-        for (int i = 1; i < steps; i++)
+        for (int i = 1; i < steps; i++) //Iterates through steps simulating 1 update of movement, not super accurate especially when right facing
         {
             float t = 0;
             while (t < 1f)
@@ -197,10 +249,10 @@ public class FrogKingAI : MonoBehaviour
         Vector3 gravity = Physics.gravity;
         //float dx = target.position.x - gameObject.transform.position.x;
         float dy = target.y - gameObject.transform.position.y;
-        Vector3 dxy = new Vector3(target.x - rb.transform.position.x, 0, target.z - rb.transform.position.z);
+        Vector3 dxz = new Vector3(target.x - rb.transform.position.x, 0, target.z - rb.transform.position.z);
 
         float tempJH = jumpAtkHeight;
-        if (dxy.x < 5 && dxy.x > -5)
+        if (dxz.x < 5 && dxz.x > -5)
         {
             jumpAtkHeight = jumpAtkHeight / 2;
         }
@@ -209,24 +261,34 @@ public class FrogKingAI : MonoBehaviour
 
         float upwardTime = Mathf.Sqrt((-2 * jumpAtkHeight) / gravity.y);
         float downwardTime = Mathf.Sqrt((2 * (dy - jumpAtkHeight)) / gravity.y);
-
-        Vector3 initialHorizontalVel = (dxy * 1.7f) / (upwardTime + downwardTime);
+        Vector3 initialHorizontalVel = Vector3.zero;
+        if (float.IsNaN(upwardTime) || float.IsNaN(downwardTime))
+        {
+            initialHorizontalVel = (dxz * 1.7f) / (3);
+            Debug.Log("fumbled");
+        }
+        else
+        {
+            initialHorizontalVel = (dxz * 1.7f) / (upwardTime + downwardTime);
+        }
+        
 
         isCharging = false;
+        
         rb.velocity = initialHorizontalVel + initialUpVel;
         lastJumped = Time.time;
         jumpAtkHeight = tempJH;
-        Debug.Log("jumped");
+        
     }
 
     private void jumpAttack2(Vector3 target)
     {
         Vector3 gravity = Physics.gravity;
         float dy = target.y - gameObject.transform.position.y;
-        Vector3 dxy = new Vector3(target.x - rb.transform.position.x, 0, target.z - rb.transform.position.z);
+        Vector3 dxz = new Vector3(target.x - rb.transform.position.x, 0, target.z - rb.transform.position.z);
 
         float tempJH = jumpAtkHeight;
-        if (dxy.x < 5 && dxy.x > -5)
+        if (dxz.x < 5 && dxz.x > -5)
         {
             jumpAtkHeight = jumpAtkHeight / 2;
         }
@@ -236,19 +298,19 @@ public class FrogKingAI : MonoBehaviour
         float upwardTime = Mathf.Sqrt((-2 * jumpAtkHeight) / gravity.y);
         float downwardTime = Mathf.Sqrt((2 * (dy - jumpAtkHeight)) / gravity.y);
 
-        Vector3 initialHorizontalVel = (dxy * 1.5f) / (upwardTime + downwardTime);
+        Vector3 initialHorizontalVel = (dxz * 1.5f) / (upwardTime + downwardTime);
 
         isCharging = false;
         tongueTrigger = true;
         rb.velocity = initialHorizontalVel + initialUpVel;
         lastJumped = Time.time;
         jumpAtkHeight = tempJH;
-        Debug.Log("jumped2");
+        //Debug.Log("jumped2");
     }
 
     private void tongueAttack()
     {
-        if (Time.time - lastJumped > 0.5) //make sure we dont shoot early
+        if (Time.time - lastJumped > 0.5) //make sure we dont shoot before we leave the ground
         {
             tongueTrigger = false;
             GameObject tongue = Instantiate(tonguePrefab, tongueSP);
@@ -258,6 +320,31 @@ public class FrogKingAI : MonoBehaviour
 
     }
 
+    private void hide()
+    {
+        isHiding = true;
+        GameObject[] platforms = GameObject.FindGameObjectsWithTag("Platform");
+        Transform[] platformPos = new Transform[platforms.Length];
+        for (int i = 0; i < platforms.Length; i++) //Get a referance to all platforms positions
+        {
+            platformPos[i] = platforms[i].GetComponent<Transform>();
+        }
+        float tempDist;
+        float bestdistance = 0;
+        Transform bestHidingSpot = gameObject.transform;
+        foreach (Transform p in platformPos) //Iterate through platforms to find best hiding spot (Most distance, would have made it distance from player but it does not work well for gameplay))
+        {
+            tempDist = Vector3.Distance(gameObject.transform.position, p.position);
+            if (tempDist > bestdistance)
+            {
+                bestdistance = tempDist;
+                bestHidingSpot = p;
+            }
+        }
+        Vector3 hidingSpot = Vector3.zero + bestHidingSpot.position;
+        hidingSpot.x -= 4; //Append hiding spot location to account for frog's large size and offset body
+        jump(hidingSpot);
+    }
 
     private void aimPrediction(Vector3 target, float speed = 0.5f)
     {
@@ -267,7 +354,7 @@ public class FrogKingAI : MonoBehaviour
         float targetXPos = player.transform.position.x;
         float xdisplacementPerTick;
 
-        if (targetXMovement > 0)
+        if (targetXMovement > 0) //Find player's X movement/displacement
         {
             xdisplacementPerTick = targetXPos - (targetXPos + (targetXMovement * Time.deltaTime));
         }
@@ -280,7 +367,7 @@ public class FrogKingAI : MonoBehaviour
         float targetYPos = player.transform.position.y;
         float ydisplacementPerTick;
 
-        if (targetYMovement > 0)
+        if (targetYMovement > 0) //Find player's Y movement/displacement
         {
             ydisplacementPerTick = targetYPos - (targetYPos + (targetYMovement * Time.deltaTime));
         }
@@ -291,35 +378,95 @@ public class FrogKingAI : MonoBehaviour
 
         float xDisplacement = xdisplacementPerTick * time_to_target;
         float yDisplacement = ydisplacementPerTick * time_to_target;
-        Vector3 predictedVec = new Vector3(targetXPos + xDisplacement, targetYPos + yDisplacement);
+        Vector3 predictedVec = new Vector3(targetXPos + xDisplacement, targetYPos + yDisplacement); //predict location based on time for projectile to reach the target
 
-        float dx = predictedVec.x - transform.position.x;
+        float dx = predictedVec.x - transform.position.x; 
         float dy = predictedVec.y - transform.position.y;
 
-        double firing_angle = Math.Atan2(dy, dx);
+        double firing_angle = Math.Atan2(dy, dx); //using the displacmement, Find the angle we will have to fire at from our current pos.
 
-        Vector3 bulletVel = new Vector3((float)(speed * Math.Cos(firing_angle)), (float)(speed * Math.Sin(firing_angle)));
+        Vector3 bulletVel = new Vector3((float)(speed * Math.Cos(firing_angle)), (float)(speed * Math.Sin(firing_angle))); //Utilising the speed and firing angle, create a vector for the new bullet's required velocity
 
         GameObject shotInstance = Instantiate(shot, new Vector3(shotSP.position.x, shotSP.position.y), Quaternion.identity);
         shotInstance.transform.LookAt(player.transform);
         shotInstance.GetComponent<Rigidbody>().velocity = bulletVel;
+        lastShot = Time.time;
 
     }
 
-    public bool FacingRight()
+    private void jump(Vector3 target)
+    {                                    
+        Vector3 gravity = Physics.gravity; // G = gravity
+        float dy = target.y - gameObject.transform.position.y;
+        Vector3 dxz = new Vector3(target.x - rb.transform.position.x, 0, target.z - rb.transform.position.z);
+
+        float tempJH = jumpAtkHeight;// H = jumpHeight
+        if (dxz.x < 5 && dxz.x > -5)
+        {
+            jumpAtkHeight = jumpAtkHeight / 2;
+        }
+
+        Vector3 initialUpVel = Vector3.up * Mathf.Sqrt(-2 * (gravity.y) * (jumpAtkHeight*1.7f)); // Initial Up Vel U = SQRT(-2gh)
+
+        float upwardTime = Mathf.Sqrt((-2 * jumpAtkHeight) / gravity.y); //Upward time T up = SQRT(-2h/g)
+        float downwardTime = Mathf.Sqrt((2 * (dy - jumpAtkHeight)) / gravity.y); //Downward time T dwn = SQRT(2(dy - h) / g)
+        Vector3 initialHorizontalVel = Vector3.zero;
+        if (float.IsNaN(upwardTime) || float.IsNaN(downwardTime)) //Unity API rounds any float 0.09 or lower to 0 causing NAN and a failed jump.
+        {
+            initialHorizontalVel = (dxz) / (3);
+            Debug.Log("fumbled");
+        }
+        else
+        {
+            initialHorizontalVel = (dxz) / (upwardTime + downwardTime); // Initial Left/Right Vel U = dx / T up + T dwn
+        }
+
+
+        isCharging = false;
+
+        rb.velocity = initialHorizontalVel + initialUpVel;
+        lastJumped = Time.time;
+        jumpAtkHeight = tempJH;
+
+    } //this function shows the mostly un-edited kinematics code, commented to show off the use of the equations and not tuned for a more playable jump like others
+
+    private void rage()
+    {
+        if (currentHP - hidingHP < -5) //If boss takes a certain amount of Hits during the hiding phase move into Rage Mode.
+        {
+            isHiding = false;
+            isShooting = false;
+            rageMode = true;
+            rageModeStart = Time.time;
+        }
+        if (rageMode && Time.time - rageModeStart < RageModeLength) // While in rage mode, make frequent random jumps
+        {
+            if (!isCharging && rb.velocity.y < 3 &&  (isGrounded || Time.time - lastJumped > chargeTime * 4))
+            {
+                chargeJump();
+            }
+            if (isCharging && Time.time - charging > 0.5)
+            {
+                jumpChoice(player.transform.position);
+            }
+        }
+    }
+
+    public bool FacingRight() //used by the Tounge to determine its direction to shoot.
     {
         return isFacingRight;
     }
-    public void takeDamage(int damage)
+    public void takeDamage(int damage) //So it can take damage from player.
     {
-        HP -= damage;
-        if (HP <= 0)
+        currentHP -= damage;
+        Debug.Log(currentHP);
+        if (currentHP <= 0)
         {
             die();
         }
     }
 
-    private void die()
+    private void die() // Instansiate boss door before death (for gameplay purposes)
     {
         BossDoor.SetActive(true);
         //Instantiate(BossDoor, new Vector3(groundCheck.position.x, groundCheck.position.y, 0), Quaternion.identity);
