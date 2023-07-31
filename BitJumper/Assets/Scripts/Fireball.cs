@@ -62,6 +62,15 @@ public class Fireball : MonoBehaviour
                     boss.takeDamage(damage);
                 }
             }
+            if (other.CompareTag("Enemy"))
+            {
+                // Deal damage to the enemy or destroy it
+                FrogScript foe = other.GetComponent<FrogScript>();
+                if (foe != null)
+                {
+                    foe.takeDamage(damage);
+                }
+            }
             Instantiate(impact, transform.position, Quaternion.identity);
             Destroy(gameObject);
         } 

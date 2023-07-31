@@ -95,7 +95,7 @@ public class CameraFollowPlayer : MonoBehaviour
 
     void LateUpdate()
     {
-        if (target != null && !isSwitching)
+        if (target != null && !isSwitching && !(target.GetComponent<HealthController>().isDead))
         {
             if (cam.orthographic)
             {
